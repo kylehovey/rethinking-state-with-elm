@@ -28,14 +28,14 @@ main =
 
 type alias Model =
     { selected : Bool
-    , deck : Deck.Deck
+    , deck : Maybe Deck.Deck
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { selected = True
-      , deck = Deck.draw 5 (Deck.mkDeck ())
+      , deck = Nothing
       }
     , Cmd.none
     )
@@ -47,6 +47,8 @@ init _ =
 
 type Msg
     = ToggleCardSelected
+    | GenerateDeck
+    | DeckGenerated Deck.Deck
     | Draw
     | Shuffle
     | Shuffled Deck.Deck
@@ -59,13 +61,24 @@ update msg model =
             ( { model | selected = not model.selected }, Cmd.none )
 
         Draw ->
-            ( { model | deck = Deck.draw 5 model.deck }, Cmd.none )
+            ( { model | deck = model.deck |> Maybe.map (Deck.draw 5) }, Cmd.none )
+
+        GenerateDeck ->
+            ( model, Random.generate DeckGenerated (Deck.mkDeck ()) )
+
+        DeckGenerated deck ->
+            ( { model | deck = Just deck }, Cmd.none )
 
         Shuffle ->
-            ( model, Random.generate Shuffled (Deck.shuffle model.deck) )
+            case model.deck of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just deck ->
+                    ( model, Random.generate Shuffled (Deck.shuffle deck) )
 
         Shuffled newDeck ->
-            ( { model | deck = newDeck }, Cmd.none )
+            ( { model | deck = Just newDeck }, Cmd.none )
 
 
 
@@ -86,11 +99,22 @@ view { deck, selected } =
     Html.div []
         [ Html.button [ onClick Draw ] [ text "Draw" ]
         , Html.button [ onClick Shuffle ] [ text "Shuffle" ]
-        , Html.fieldset []
-            (deck.hand
-                |> List.map (\card -> cardElement ToggleCardSelected selected card)
-            )
+        , Html.button [ onClick GenerateDeck ] [ text "Generate" ]
+        , handElement deck selected
         ]
+
+
+handElement : Maybe Deck.Deck -> Bool -> Html Msg
+handElement mDeck selected =
+    case mDeck of
+        Nothing ->
+            div [] []
+
+        Just deck ->
+            Html.fieldset []
+                (deck.hand
+                    |> List.map (\card -> cardElement ToggleCardSelected selected card)
+                )
 
 
 cardElement : Msg -> Bool -> Deck.Card -> Html Msg
