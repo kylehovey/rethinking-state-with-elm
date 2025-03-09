@@ -5,15 +5,20 @@ import Html exposing (..)
 import Html.Attributes exposing (style, type_)
 import Html.Events exposing (onClick)
 import Model.Deck as Deck
+import Random
 
 
 
 -- MAIN
 
 
-main : Program () Model Msg
 main =
-    Browser.sandbox { init = init, update = update, view = view }
+    Browser.element
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
+        }
 
 
 
@@ -26,11 +31,13 @@ type alias Model =
     }
 
 
-init : Model
-init =
-    { selected = True
-    , deck = Deck.draw 5 (Deck.mkDeck ())
-    }
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( { selected = True
+      , deck = Deck.draw 5 (Deck.mkDeck ())
+      }
+    , Cmd.none
+    )
 
 
 
@@ -40,16 +47,33 @@ init =
 type Msg
     = ToggleCardSelected
     | Draw
+    | Shuffle
+    | Shuffled Deck.Deck
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         ToggleCardSelected ->
-            { model | selected = model.selected }
+            ( { model | selected = model.selected }, Cmd.none )
 
         Draw ->
-            { model | deck = Deck.draw 5 model.deck }
+            ( { model | deck = Deck.draw 5 model.deck }, Cmd.none )
+
+        Shuffle ->
+            ( model, Random.generate Shuffled (Deck.shuffle model.deck) )
+
+        Shuffled newDeck ->
+            ( { model | deck = newDeck }, Cmd.none )
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 
@@ -59,7 +83,8 @@ update msg model =
 view : Model -> Html Msg
 view { deck } =
     Html.div []
-        [ Html.input [ type_ "button", onClick Draw ] []
+        [ Html.button [ onClick Draw ] [ text "Draw" ]
+        , Html.button [ onClick Shuffle ] [ text "Shuffle" ]
         , Html.fieldset []
             (deck.hand
                 |> List.map (\card -> cardElement ToggleCardSelected card)

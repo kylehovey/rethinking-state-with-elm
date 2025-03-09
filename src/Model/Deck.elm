@@ -1,5 +1,8 @@
 module Model.Deck exposing (..)
 
+import Random
+import Random.List as RandomList
+
 
 type Suit
     = Spade
@@ -193,3 +196,10 @@ discard selected ({ hand, discarded, discards } as original) =
             , discarded = List.append discarded discardedCards
             , discards = discards - 1
         }
+
+
+shuffle : Deck -> Random.Generator Deck
+shuffle ({ deck } as original) =
+    RandomList.shuffle deck
+        |> Random.map
+            (\shuffled -> { original | deck = shuffled })
