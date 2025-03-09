@@ -196,7 +196,7 @@ mkCard suit rank =
 
 
 {-| This is a really common operation in Haskell, but we don't have
-a word for it in Elm-land. Traversal takes a nested structure
+a word for it in Elm-land. Sequencing takes a nested structure
 and collects the outer structure, then places the results in
 the inner structure. In this case, it's collapsing a list of
 eventual random results into one random result of a list.
