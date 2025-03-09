@@ -29,7 +29,7 @@ type alias Model =
 init : Model
 init =
     { selected = True
-    , deck = Deck.mkDeck ()
+    , deck = Deck.draw 5 (Deck.mkDeck ())
     }
 
 

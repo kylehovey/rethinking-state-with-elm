@@ -141,7 +141,7 @@ mkDeck _ =
 
 
 draw : Int -> Deck -> Deck
-draw amount { hand, deck, discards, discarded, hands } =
+draw amount ({ hand, deck } as original) =
     let
         drawn =
             List.take amount deck
@@ -152,11 +152,9 @@ draw amount { hand, deck, discards, discarded, hands } =
         newHand =
             List.append hand drawn
     in
-    { hand = newHand
-    , deck = newDeck
-    , discarded = []
-    , discards = discards
-    , hands = hands
+    { original
+        | hand = newHand
+        , deck = newDeck
     }
 
 
@@ -171,7 +169,7 @@ snd ( _, y ) =
 
 
 discard : List Int -> Deck -> Deck
-discard selected ({ hand, deck, discarded, discards, hands } as original) =
+discard selected ({ hand, discarded, discards } as original) =
     if discards < 1 then
         original
 
@@ -190,9 +188,8 @@ discard selected ({ hand, deck, discarded, discards, hands } as original) =
             newHand =
                 inHand |> List.map snd
         in
-        { hand = newHand
-        , deck = deck
-        , discarded = List.append discarded discardedCards
-        , discards = discards - 1
-        , hands = hands
+        { original
+            | hand = newHand
+            , discarded = List.append discarded discardedCards
+            , discards = discards - 1
         }
