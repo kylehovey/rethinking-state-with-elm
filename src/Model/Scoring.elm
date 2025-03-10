@@ -83,10 +83,50 @@ isFlush hand =
     List.any (\x -> x >= 5) suitCounts
 
 
+zip : List a -> List b -> List ( a, b )
+zip =
+    List.map2 Tuple.pair
+
+
+forwardDifference : List Int -> List Int
+forwardDifference values =
+    let
+        shifted =
+            List.drop 1 values
+
+        zipped =
+            zip values shifted
+    in
+    zipped
+        |> List.map (\( a, b ) -> a - b)
+
+
+isStraight : List Card.Card -> Bool
+isStraight hand =
+    let
+        sortedOrder =
+            Card.sortHand Card.ByRank hand
+                |> List.map (\{ rank } -> Card.rankToOrder rank)
+
+        handLength =
+            List.length hand
+
+        differences =
+            forwardDifference sortedOrder
+
+        isHighStraight =
+            sortedOrder == [ 11, 5, 4, 3, 2 ]
+    in
+    (handLength == 5) && (List.all (\x -> x == 1) differences || isHighStraight)
+
+
 getHandKind : List Card.Card -> Maybe HandKind
 getHandKind hand =
     if isFlush hand then
         Just Flush
+
+    else if isStraight hand then
+        Just Straight
 
     else
         Nothing
