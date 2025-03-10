@@ -45,8 +45,8 @@ getHand selected deck =
         |> catMaybes
 
 
-draw : Int -> Deck -> Deck
-draw amount ({ hand, deck } as original) =
+draw : Int -> Card.SortOrder -> Deck -> Deck
+draw amount sortOrder ({ hand, deck } as original) =
     let
         drawn =
             List.take amount deck
@@ -58,7 +58,7 @@ draw amount ({ hand, deck } as original) =
             List.append hand drawn
     in
     { original
-        | hand = Card.sortHand Card.ByRank newHand
+        | hand = Card.sortHand sortOrder newHand
         , deck = newDeck
     }
 

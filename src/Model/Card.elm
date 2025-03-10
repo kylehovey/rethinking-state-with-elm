@@ -44,18 +44,10 @@ sortHand order =
         comparison =
             case order of
                 BySuit ->
-                    suitToOrder << (\{ suit } -> suit)
+                    cardToSuitOrder
 
                 ByRank ->
-                    \{ rank } ->
-                        let
-                            chips =
-                                rankToChips rank
-
-                            cardOrder =
-                                rankToOrder rank
-                        in
-                        chips * 100 + cardOrder
+                    cardToRankOrder
     in
     List.reverse
         << List.sortBy comparison
@@ -176,6 +168,35 @@ rankToChips rank =
             rankMetadata rank
     in
     chips
+
+
+{-| Order by rank alone, counting Ace as high
+e.g. A,Q,J,4,3,2
+-}
+cardToRankOrder : Card -> Int
+cardToRankOrder { rank } =
+    let
+        chips =
+            rankToChips rank
+
+        cardOrder =
+            rankToOrder rank
+    in
+    chips * 100 + cardOrder
+
+
+{-| Order by suit, and then by rank within suit
+-}
+cardToSuitOrder : Card -> Int
+cardToSuitOrder ({ suit } as card) =
+    let
+        rankOrder =
+            cardToRankOrder card
+
+        suitOrder =
+            suitToOrder suit
+    in
+    suitOrder * 10000 + rankOrder
 
 
 {-| Knight is a card that is in the unicode block but that is

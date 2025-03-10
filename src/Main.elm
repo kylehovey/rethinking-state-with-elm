@@ -38,6 +38,7 @@ type alias Model =
     , hands : Int
     , discards : Int
     , deck : Maybe Deck.Deck
+    , sorting : Card.SortOrder
     }
 
 
@@ -47,6 +48,7 @@ init _ =
       , hands = 4
       , discards = 3
       , deck = Nothing
+      , sorting = Card.ByRank
       }
     , generateDeck
     )
@@ -101,7 +103,7 @@ update msg model =
             ( { model | selected = modify cardId model.selected }, Cmd.none )
 
         Draw cards ->
-            ( { model | deck = model.deck |> Maybe.map (Deck.draw cards) }, Cmd.none )
+            ( { model | deck = model.deck |> Maybe.map (Deck.draw cards model.sorting) }, Cmd.none )
 
         Discard ->
             case ( model.deck, model.discards ) of
