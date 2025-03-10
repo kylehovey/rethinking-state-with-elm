@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Model.Deck as Deck
 import Random
+import Task
 
 
 
@@ -37,7 +38,7 @@ init _ =
     ( { selected = True
       , deck = Nothing
       }
-    , Cmd.none
+    , generateDeck
     )
 
 
@@ -54,6 +55,16 @@ type Msg
     | Shuffled Deck.Deck
 
 
+generateDeck : Cmd Msg
+generateDeck =
+    Random.generate DeckGenerated (Deck.mkDeck ())
+
+
+msgTask : Msg -> Cmd Msg
+msgTask msg =
+    Task.succeed msg |> Task.perform identity
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -64,10 +75,10 @@ update msg model =
             ( { model | deck = model.deck |> Maybe.map (Deck.draw 5) }, Cmd.none )
 
         GenerateDeck ->
-            ( model, Random.generate DeckGenerated (Deck.mkDeck ()) )
+            ( model, generateDeck )
 
         DeckGenerated deck ->
-            ( { model | deck = Just deck }, Cmd.none )
+            ( { model | deck = Just deck }, msgTask Shuffle )
 
         Shuffle ->
             case model.deck of
@@ -98,8 +109,6 @@ view : Model -> Html Msg
 view { deck, selected } =
     Html.div []
         [ Html.button [ onClick Draw ] [ text "Draw" ]
-        , Html.button [ onClick Shuffle ] [ text "Shuffle" ]
-        , Html.button [ onClick GenerateDeck ] [ text "Generate" ]
         , handElement deck selected
         ]
 
@@ -111,7 +120,7 @@ handElement mDeck selected =
             div [] []
 
         Just deck ->
-            Html.fieldset []
+            div []
                 (deck.hand
                     |> List.map (\card -> cardElement ToggleCardSelected selected card)
                 )
