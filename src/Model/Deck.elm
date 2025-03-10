@@ -1,5 +1,6 @@
 module Model.Deck exposing (..)
 
+import EverySet
 import Random
 import Random.List as RandomList
 import UUID
@@ -122,7 +123,7 @@ type alias Deck =
     , deck : List Card
     , discarded : List Card
     , discards : Int
-    , hands : Int
+    , handSize : Int
     }
 
 
@@ -146,7 +147,7 @@ draw amount ({ hand, deck } as original) =
 
 {-| Discard the selected cards from the current hand.
 -}
-discard : List UUID.UUID -> Deck -> Deck
+discard : EverySet.EverySet UUID.UUID -> Deck -> Deck
 discard selected ({ hand, discarded, discards } as original) =
     if discards < 1 then
         original
@@ -157,7 +158,7 @@ discard selected ({ hand, discarded, discards } as original) =
                 hand
                     |> List.partition
                         (\{ id } ->
-                            List.member id selected
+                            EverySet.member id selected
                         )
         in
         { original
@@ -226,6 +227,6 @@ mkDeck _ =
                 , deck = deck
                 , discarded = []
                 , discards = 3
-                , hands = 4
+                , handSize = 8
                 }
             )

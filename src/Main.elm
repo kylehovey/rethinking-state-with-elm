@@ -31,6 +31,7 @@ main =
 
 type alias Model =
     { selected : EverySet.EverySet UUID.UUID
+    , hands : Int
     , deck : Maybe Deck.Deck
     }
 
@@ -38,6 +39,7 @@ type alias Model =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { selected = EverySet.empty
+      , hands = 4
       , deck = Nothing
       }
     , generateDeck
@@ -52,7 +54,8 @@ type Msg
     = ToggleCardSelected UUID.UUID
     | GenerateDeck
     | DeckGenerated Deck.Deck
-    | Draw
+    | Draw Int
+    | Discard
     | Shuffle
     | Shuffled Deck.Deck
 
@@ -84,8 +87,21 @@ update msg model =
             in
             ( { model | selected = modify cardId model.selected }, Cmd.none )
 
-        Draw ->
-            ( { model | deck = model.deck |> Maybe.map (Deck.draw 5) }, Cmd.none )
+        Draw cards ->
+            ( { model | deck = model.deck |> Maybe.map (Deck.draw cards) }, Cmd.none )
+
+        Discard ->
+            case model.deck of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just deck ->
+                    ( { model
+                        | deck = Just <| Deck.discard model.selected deck
+                        , selected = EverySet.empty
+                      }
+                    , msgTask (Draw (EverySet.size model.selected))
+                    )
 
         GenerateDeck ->
             ( model, generateDeck )
@@ -102,7 +118,7 @@ update msg model =
                     ( model, Random.generate Shuffled (Deck.shuffle deck) )
 
         Shuffled newDeck ->
-            ( { model | deck = Just newDeck }, msgTask Draw )
+            ( { model | deck = Just newDeck }, msgTask (Draw 8) )
 
 
 
@@ -122,6 +138,7 @@ view : Model -> Html Msg
 view { deck, selected } =
     Html.div []
         [ h1 [] [ text "Elmatro" ]
+        , button [ onClick Discard ] [ text "Discard" ]
         , handElement deck selected
         ]
 
