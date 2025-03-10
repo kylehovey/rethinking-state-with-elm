@@ -137,10 +137,16 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view { deck, selected } =
-    nav []
-        [ h1 [] [ text "Elmatro" ]
-        , button [ onClick Discard ] [ text "Discard" ]
+    nav
+        [ css
+            [ displayFlex
+            , alignItems center
+            , flexDirection column
+            ]
+        ]
+        [ h1 [ css [ textAlign center ] ] [ text "Elmatro" ]
         , handElement deck selected
+        , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
         ]
 
 
