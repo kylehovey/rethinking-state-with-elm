@@ -161,6 +161,45 @@ rankToOrder rank =
     order
 
 
+{-| Knight is a card that is in the unicode block but that is
+not in a standard 52-card deck.
+-}
+knightOfSuit : Suit -> Int
+knightOfSuit suit =
+    let
+        ace =
+            case suit of
+                Spade ->
+                    '🂬'
+
+                Heart ->
+                    '🂼'
+
+                Diamond ->
+                    '🃌'
+
+                Club ->
+                    '🃜'
+    in
+    Char.toCode ace
+
+
+skipKnight : Suit -> Int -> Int
+skipKnight suit code =
+    let
+        knightCode =
+            knightOfSuit suit
+
+        skip =
+            if code >= knightCode then
+                1
+
+            else
+                0
+    in
+    code + skip
+
+
 {-| The first playing card in the Unicode block for each suit
 -}
 aceOfSuit : Suit -> Int
@@ -190,6 +229,7 @@ cardToUnicode { suit, rank } =
             rankMetadata rank
     in
     (aceOfSuit suit + rankOrder)
+        |> skipKnight suit
         |> Char.fromCode
         |> String.fromChar
 
