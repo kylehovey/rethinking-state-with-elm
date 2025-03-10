@@ -102,7 +102,7 @@ update msg model =
                     ( model, Random.generate Shuffled (Deck.shuffle deck) )
 
         Shuffled newDeck ->
-            ( { model | deck = Just newDeck }, Cmd.none )
+            ( { model | deck = Just newDeck }, msgTask Draw )
 
 
 
@@ -121,7 +121,7 @@ subscriptions _ =
 view : Model -> Html Msg
 view { deck, selected } =
     Html.div []
-        [ Html.button [ onClick Draw ] [ text "Draw" ]
+        [ h1 [] [ text "Elmatro" ]
         , handElement deck selected
         ]
 
