@@ -58,7 +58,7 @@ draw amount ({ hand, deck } as original) =
             List.append hand drawn
     in
     { original
-        | hand = List.reverse <| Card.sortHand Card.ByRank newHand
+        | hand = Card.sortHand Card.ByRank newHand
         , deck = newDeck
     }
 

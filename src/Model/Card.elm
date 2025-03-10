@@ -50,6 +50,7 @@ sortHand order =
                     rankToOrder << (\{ rank } -> rank)
     in
     List.sortBy comparison
+        << List.reverse
 
 
 {-| (name, order, color)
