@@ -72,8 +72,24 @@ groupBySuit hand =
             Dict.empty
 
 
-isFlush : List Card.Card -> Bool
-isFlush hand =
+groupByRank : List Card.Card -> Dict.Dict Card.Rank (List Card.Card)
+groupByRank hand =
+    hand
+        |> List.map (\card -> ( card.rank, card ))
+        |> List.foldl
+            (\( rank, card ) acc ->
+                case Dict.get Card.rankToString rank acc of
+                    Nothing ->
+                        Dict.insert Card.rankToString rank [ card ] acc
+
+                    Just existing ->
+                        Dict.insert Card.rankToString rank (List.append existing [ card ]) acc
+            )
+            Dict.empty
+
+
+hasFlush : List Card.Card -> Bool
+hasFlush hand =
     let
         suitCounts =
             groupBySuit hand
@@ -101,8 +117,8 @@ forwardDifference values =
         |> List.map (\( a, b ) -> a - b)
 
 
-isStraight : List Card.Card -> Bool
-isStraight hand =
+hasStraight : List Card.Card -> Bool
+hasStraight hand =
     let
         sortedOrder =
             Card.sortHand Card.ByRank hand
@@ -115,18 +131,84 @@ isStraight hand =
             forwardDifference sortedOrder
 
         isHighStraight =
-            sortedOrder == [ 11, 5, 4, 3, 2 ]
+            sortedOrder == [ 0, 4, 3, 2, 1 ]
     in
     (handLength == 5) && (List.all (\x -> x == 1) differences || isHighStraight)
 
 
+rankCounts : List Card.Card -> List Int
+rankCounts hand =
+    groupByRank hand
+        |> Dict.toList
+        |> List.map (List.length << Tuple.second)
+
+
+hasNOfKind : Int -> List Card.Card -> Bool
+hasNOfKind n hand =
+    rankCounts hand
+        |> List.any (\count -> count == n)
+
+
+hasTwoPair : List Card.Card -> Bool
+hasTwoPair hand =
+    let
+        pairs =
+            rankCounts hand
+                |> List.filter (\x -> x == 2)
+    in
+    List.length pairs == 2
+
+
+hasFullHouse : List Card.Card -> Bool
+hasFullHouse hand =
+    let
+        counts =
+            rankCounts hand
+    in
+    List.member 3 counts && List.member 2 counts
+
+
+hasRoyalStraight : List Card.Card -> Bool
+hasRoyalStraight hand =
+    let
+        sortedOrder =
+            Card.sortHand Card.ByRank hand
+                |> List.map (\{ rank } -> rank)
+    in
+    sortedOrder == [ Card.Ace, Card.King, Card.Queen, Card.Jack, Card.Ten ]
+
+
 getHandKind : List Card.Card -> Maybe HandKind
 getHandKind hand =
-    if isFlush hand then
+    if hasFlush hand && hasRoyalStraight hand then
+        Just RoyalFlush
+
+    else if hasFlush hand && hasStraight hand then
+        Just StraightFlush
+
+    else if hasNOfKind 4 hand then
+        Just FourOfAKind
+
+    else if hasFullHouse hand then
+        Just FullHouse
+
+    else if hasFlush hand then
         Just Flush
 
-    else if isStraight hand then
+    else if hasStraight hand then
         Just Straight
+
+    else if hasNOfKind 3 hand then
+        Just ThreeOfAKind
+
+    else if hasTwoPair hand then
+        Just TwoPair
+
+    else if hasNOfKind 2 hand then
+        Just Pair
+
+    else if List.length hand > 0 then
+        Just HighCard
 
     else
         Nothing
