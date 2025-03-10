@@ -1,10 +1,11 @@
 module Main exposing (Model, Msg(..), init, main, update, view)
 
 import Browser
+import Css exposing (..)
 import EverySet
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Styled exposing (..)
+import Html.Styled.Attributes exposing (css)
+import Html.Styled.Events exposing (onClick)
 import Model.Deck as Deck
 import Random
 import Task
@@ -21,7 +22,7 @@ main =
         { init = init
         , update = update
         , subscriptions = subscriptions
-        , view = view
+        , view = view >> toUnstyled
         }
 
 
@@ -136,7 +137,7 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view { deck, selected } =
-    Html.div []
+    nav []
         [ h1 [] [ text "Elmatro" ]
         , button [ onClick Discard ] [ text "Discard" ]
         , handElement deck selected
@@ -154,7 +155,15 @@ handElement mDeck selected =
             div [] []
 
         Just deck ->
-            div []
+            div
+                [ css
+                    [ paddingTop <| px 100
+                    , displayFlex
+                    , flexDirection row
+                    , justifyContent center
+                    , height <| px 200
+                    ]
+                ]
                 (deck.hand
                     |> List.map
                         (\card ->
@@ -167,16 +176,26 @@ handElement mDeck selected =
 
 
 cardElement : Msg -> Bool -> Deck.Card -> Html Msg
-cardElement msg selected { suit, rank } =
-    label
-        [ style "padding" "20px" ]
-        [ input [ type_ "checkbox", checked selected, onClick msg ] []
-        , text
-            (String.join
-                ""
-                [ Deck.rankToString rank
-                , " of "
-                , Deck.suitToString suit
+cardElement msg selected card =
+    div
+        [ css
+            [ position relative
+            , bottom <|
+                if selected then
+                    px 50
+
+                else
+                    px 0
+            ]
+        ]
+        [ button
+            [ onClick msg
+            , css
+                [ fontSize <| rem 10
+                , textAlign center
                 ]
-            )
+            ]
+            [ text <|
+                Deck.cardToUnicode card
+            ]
         ]

@@ -8,13 +8,14 @@ import UUID
 
 type Suit
     = Spade
-    | Club
     | Heart
     | Diamond
+    | Club
 
 
 type Rank
-    = Two
+    = Ace
+    | Two
     | Three
     | Four
     | Five
@@ -26,66 +27,116 @@ type Rank
     | Jack
     | Queen
     | King
-    | Ace
+
+
+{-| (name, order)
+-}
+suitMetadata : Suit -> ( String, Int )
+suitMetadata suit =
+    case suit of
+        Spade ->
+            ( "Spades", 0 )
+
+        Club ->
+            ( "Clubs", 1 )
+
+        Heart ->
+            ( "Hearts", 2 )
+
+        Diamond ->
+            ( "Diamonds", 3 )
 
 
 suitToString : Suit -> String
-suitToString suit =
-    case suit of
-        Spade ->
-            "Spades"
+suitToString =
+    Tuple.first << suitMetadata
 
-        Club ->
-            "Clubs"
 
-        Heart ->
-            "Hearts"
+{-| (name, order, score)
+-}
+rankMetadata : Rank -> ( String, Int, Int )
+rankMetadata rank =
+    case rank of
+        Ace ->
+            ( "Ace", 0, 11 )
 
-        Diamond ->
-            "Diamonds"
+        Two ->
+            ( "Two", 1, 2 )
+
+        Three ->
+            ( "Three", 2, 3 )
+
+        Four ->
+            ( "Four", 3, 4 )
+
+        Five ->
+            ( "Five", 4, 5 )
+
+        Six ->
+            ( "Six", 5, 6 )
+
+        Seven ->
+            ( "Seven", 6, 7 )
+
+        Eight ->
+            ( "Eight", 7, 8 )
+
+        Nine ->
+            ( "Nine", 8, 9 )
+
+        Ten ->
+            ( "Ten", 9, 10 )
+
+        Jack ->
+            ( "Jack", 10, 10 )
+
+        Queen ->
+            ( "Queen", 11, 10 )
+
+        King ->
+            ( "King", 12, 10 )
 
 
 rankToString : Rank -> String
 rankToString rank =
-    case rank of
-        Two ->
-            "Two"
+    let
+        ( name, _, _ ) =
+            rankMetadata rank
+    in
+    name
 
-        Three ->
-            "Three"
 
-        Four ->
-            "Four"
+{-| The first playing card in the Unicode block for each suit
+-}
+aceOfSuit : Suit -> Int
+aceOfSuit suit =
+    let
+        ace =
+            case suit of
+                Spade ->
+                    '🂡'
 
-        Five ->
-            "Five"
+                Heart ->
+                    '🂱'
 
-        Six ->
-            "Six"
+                Diamond ->
+                    '🃁'
 
-        Seven ->
-            "Seven"
+                Club ->
+                    '🃑'
+    in
+    Char.toCode ace
 
-        Eight ->
-            "Eight"
 
-        Nine ->
-            "Nine"
-
-        Ten ->
-            "Ten"
-
-        Jack ->
-            "Jack"
-
-        Queen ->
-            "Queen"
-
-        King ->
-            "King"
-
-        Ace ->
-            "Ace"
+cardToUnicode : Card -> String
+cardToUnicode { suit, rank } =
+    let
+        ( _, rankOrder, _ ) =
+            rankMetadata rank
+    in
+    (aceOfSuit suit + rankOrder)
+        |> Char.fromCode
+        |> String.fromChar
 
 
 allSuits : List Suit
