@@ -144,35 +144,21 @@ draw amount ({ hand, deck } as original) =
     }
 
 
-enumerate : List a -> List ( Int, a )
-enumerate =
-    List.indexedMap Tuple.pair
-
-
-snd : ( a, b ) -> b
-snd ( _, y ) =
-    y
-
-
-discard : List Int -> Deck -> Deck
+{-| Discard the selected cards from the current hand.
+-}
+discard : List UUID.UUID -> Deck -> Deck
 discard selected ({ hand, discarded, discards } as original) =
     if discards < 1 then
         original
 
     else
         let
-            ( inDiscard, inHand ) =
-                enumerate hand
+            ( discardedCards, newHand ) =
+                hand
                     |> List.partition
-                        (\( order, _ ) ->
-                            List.member order selected
+                        (\{ id } ->
+                            List.member id selected
                         )
-
-            discardedCards =
-                inDiscard |> List.map snd
-
-            newHand =
-                inHand |> List.map snd
         in
         { original
             | hand = newHand
