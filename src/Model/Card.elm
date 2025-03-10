@@ -47,10 +47,18 @@ sortHand order =
                     suitToOrder << (\{ suit } -> suit)
 
                 ByRank ->
-                    rankToOrder << (\{ rank } -> rank)
+                    \{ rank } ->
+                        let
+                            chips =
+                                rankToChips rank
+
+                            cardOrder =
+                                rankToOrder rank
+                        in
+                        chips * 100 + cardOrder
     in
-    List.sortBy comparison
-        << List.reverse
+    List.reverse
+        << List.sortBy comparison
 
 
 {-| (name, order, color)
@@ -159,6 +167,15 @@ rankToOrder rank =
             rankMetadata rank
     in
     order
+
+
+rankToChips : Rank -> Int
+rankToChips rank =
+    let
+        ( _, _, chips ) =
+            rankMetadata rank
+    in
+    chips
 
 
 {-| Knight is a card that is in the unicode block but that is
