@@ -38,7 +38,7 @@ type alias Model =
     , hands : Int
     , discards : Int
     , deck : Maybe Deck.Deck
-    , sorting : Card.SortOrder
+    , sortOrder : Card.SortOrder
     }
 
 
@@ -48,7 +48,7 @@ init _ =
       , hands = 4
       , discards = 3
       , deck = Nothing
-      , sorting = Card.ByRank
+      , sortOrder = Card.ByRank
       }
     , generateDeck
     )
@@ -64,6 +64,7 @@ type Msg
     | DeckGenerated Deck.Deck
     | Draw Int
     | Discard
+    | Sort Card.SortOrder
     | Shuffle
     | Shuffled Deck.Deck
 
@@ -103,7 +104,10 @@ update msg model =
             ( { model | selected = modify cardId model.selected }, Cmd.none )
 
         Draw cards ->
-            ( { model | deck = model.deck |> Maybe.map (Deck.draw cards model.sorting) }, Cmd.none )
+            ( { model | deck = model.deck |> Maybe.map (Deck.draw cards model.sortOrder) }, Cmd.none )
+
+        Sort sortOrder ->
+            ( { model | sortOrder = sortOrder, deck = model.deck |> Maybe.map (Deck.sort sortOrder) }, Cmd.none )
 
         Discard ->
             case ( model.deck, model.discards ) of
@@ -170,6 +174,10 @@ view ({ deck, selected, hands, discards } as model) =
             ]
         , handElement deck selected
         , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
+        , div []
+            [ button [ css [ marginTop <| px 12 ], onClick <| Sort Card.ByRank ] [ text "Rank" ]
+            , button [ css [ marginTop <| px 12 ], onClick <| Sort Card.BySuit ] [ text "Suit" ]
+            ]
         , Css.Global.global
             [ [ backgroundColor <| rgb 60 56 54
               ]

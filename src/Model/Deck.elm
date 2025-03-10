@@ -63,6 +63,11 @@ draw amount sortOrder ({ hand, deck } as original) =
     }
 
 
+sort : Card.SortOrder -> Deck -> Deck
+sort sortOrder ({ hand } as original) =
+    { original | hand = Card.sortHand sortOrder hand }
+
+
 {-| Discard the selected cards from the current hand.
 -}
 discard : EverySet.EverySet UUID.UUID -> Deck -> Deck
