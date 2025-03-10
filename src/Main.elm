@@ -2,6 +2,7 @@ module Main exposing (Model, Msg(..), init, main, update, view)
 
 import Browser
 import Css exposing (..)
+import Css.Global
 import EverySet
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css)
@@ -164,6 +165,11 @@ view { deck, selected, hands, discards } =
             ]
         , handElement deck selected
         , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
+        , Css.Global.global
+            [ [ backgroundColor <| rgb 60 56 54
+              ]
+                |> Css.Global.body
+            ]
         ]
 
 
@@ -180,11 +186,14 @@ handElement mDeck selected =
         Just deck ->
             div
                 [ css
-                    [ paddingTop <| px 100
+                    [ paddingTop <| px 70
                     , displayFlex
                     , flexDirection row
                     , justifyContent center
-                    , height <| px 200
+                    , height <| px 170
+                    , backgroundColor <| rgb 80 73 69
+                    , borderRadius <| px 10
+                    , boxShadow5 inset (px 0) (px 0) (px 10) (rgb 60 56 54)
                     ]
                 ]
                 (deck.hand
@@ -205,10 +214,10 @@ cardElement msg selected card =
             [ position relative
             , bottom <|
                 if selected then
-                    px 50
+                    px 70
 
                 else
-                    px 0
+                    px 30
             ]
         ]
         [ button
@@ -223,6 +232,9 @@ cardElement msg selected card =
                         Deck.suitToColor card.suit
                   in
                   color <| rgb r g b
+                , hover
+                    [ cursor pointer
+                    ]
                 ]
             ]
             [ text <|
