@@ -33,6 +33,7 @@ main =
 type alias Model =
     { selected : EverySet.EverySet UUID.UUID
     , hands : Int
+    , discards : Int
     , deck : Maybe Deck.Deck
     }
 
@@ -41,6 +42,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { selected = EverySet.empty
       , hands = 4
+      , discards = 3
       , deck = Nothing
       }
     , generateDeck
@@ -92,14 +94,18 @@ update msg model =
             ( { model | deck = model.deck |> Maybe.map (Deck.draw cards) }, Cmd.none )
 
         Discard ->
-            case model.deck of
-                Nothing ->
+            case ( model.deck, model.discards ) of
+                ( Nothing, _ ) ->
                     ( model, Cmd.none )
 
-                Just deck ->
+                ( _, 0 ) ->
+                    ( model, Cmd.none )
+
+                ( Just deck, discards ) ->
                     ( { model
                         | deck = Just <| Deck.discard model.selected deck
                         , selected = EverySet.empty
+                        , discards = discards - 1
                       }
                     , msgTask (Draw (EverySet.size model.selected))
                     )
@@ -136,7 +142,7 @@ subscriptions _ =
 
 
 view : Model -> Html Msg
-view { deck, selected } =
+view { deck, selected, hands, discards } =
     nav
         [ css
             [ displayFlex
@@ -145,6 +151,10 @@ view { deck, selected } =
             ]
         ]
         [ h1 [ css [ textAlign center ] ] [ text "Elmatro" ]
+        , div [ css [ displayFlex, flexDirection column ] ]
+            [ span [] [ text <| ("Hands: " ++ String.fromInt hands) ]
+            , span [] [ text <| ("Discards: " ++ String.fromInt discards) ]
+            ]
         , handElement deck selected
         , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
         ]
@@ -199,6 +209,13 @@ cardElement msg selected card =
             , css
                 [ fontSize <| rem 10
                 , textAlign center
+                , backgroundColor transparent
+                , border (px 0)
+                , let
+                    ( r, g, b ) =
+                        Deck.suitToColor card.suit
+                  in
+                  color <| rgb r g b
                 ]
             ]
             [ text <|

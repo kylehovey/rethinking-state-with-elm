@@ -29,27 +29,40 @@ type Rank
     | King
 
 
-{-| (name, order)
+{-| (name, order, color)
 -}
-suitMetadata : Suit -> ( String, Int )
+suitMetadata : Suit -> ( String, Int, ( Int, Int, Int ) )
 suitMetadata suit =
     case suit of
         Spade ->
-            ( "Spades", 0 )
+            ( "Spades", 0, ( 50, 48, 39 ) )
 
         Club ->
-            ( "Clubs", 1 )
+            ( "Clubs", 1, ( 69, 133, 136 ) )
 
         Heart ->
-            ( "Hearts", 2 )
+            ( "Hearts", 2, ( 251, 73, 52 ) )
 
         Diamond ->
-            ( "Diamonds", 3 )
+            ( "Diamonds", 3, ( 250, 189, 47 ) )
 
 
 suitToString : Suit -> String
-suitToString =
-    Tuple.first << suitMetadata
+suitToString suit =
+    let
+        ( name, _, _ ) =
+            suitMetadata suit
+    in
+    name
+
+
+suitToColor : Suit -> ( Int, Int, Int )
+suitToColor suit =
+    let
+        ( _, _, color ) =
+            suitMetadata suit
+    in
+    color
 
 
 {-| (name, order, score)
@@ -173,7 +186,6 @@ type alias Deck =
     { hand : List Card
     , deck : List Card
     , discarded : List Card
-    , discards : Int
     , handSize : Int
     }
 
@@ -199,24 +211,19 @@ draw amount ({ hand, deck } as original) =
 {-| Discard the selected cards from the current hand.
 -}
 discard : EverySet.EverySet UUID.UUID -> Deck -> Deck
-discard selected ({ hand, discarded, discards } as original) =
-    if discards < 1 then
-        original
-
-    else
-        let
-            ( discardedCards, newHand ) =
-                hand
-                    |> List.partition
-                        (\{ id } ->
-                            EverySet.member id selected
-                        )
-        in
-        { original
-            | hand = newHand
-            , discarded = List.append discarded discardedCards
-            , discards = discards - 1
-        }
+discard selected ({ hand, discarded } as original) =
+    let
+        ( discardedCards, newHand ) =
+            hand
+                |> List.partition
+                    (\{ id } ->
+                        EverySet.member id selected
+                    )
+    in
+    { original
+        | hand = newHand
+        , discarded = List.append discarded discardedCards
+    }
 
 
 shuffle : Deck -> Random.Generator Deck
@@ -277,7 +284,6 @@ mkDeck _ =
                 { hand = []
                 , deck = deck
                 , discarded = []
-                , discards = 3
                 , handSize = 8
                 }
             )
