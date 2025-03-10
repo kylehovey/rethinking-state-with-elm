@@ -81,12 +81,19 @@ update msg model =
                 isSelected =
                     EverySet.member cardId model.selected
 
-                modify =
-                    if isSelected then
-                        EverySet.remove
+                amountSelected =
+                    EverySet.size model.selected
 
-                    else
-                        EverySet.insert
+                modify =
+                    case ( isSelected, amountSelected >= 5 ) of
+                        ( True, _ ) ->
+                            EverySet.remove
+
+                        ( False, False ) ->
+                            EverySet.insert
+
+                        ( False, True ) ->
+                            \_ -> identity
             in
             ( { model | selected = modify cardId model.selected }, Cmd.none )
 
