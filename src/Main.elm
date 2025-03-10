@@ -9,6 +9,7 @@ import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (onClick)
 import Model.Card as Card
 import Model.Deck as Deck
+import Model.Scoring as Scoring
 import Random
 import Task
 import UUID
@@ -151,7 +152,7 @@ subscriptions _ =
 
 
 view : Model -> Html Msg
-view { deck, selected, hands, discards } =
+view ({ deck, selected, hands, discards } as model) =
     nav
         [ css
             [ displayFlex
@@ -163,6 +164,7 @@ view { deck, selected, hands, discards } =
         , div [ css [ displayFlex, flexDirection column ] ]
             [ span [] [ text <| ("Hands: " ++ String.fromInt hands) ]
             , span [] [ text <| ("Discards: " ++ String.fromInt discards) ]
+            , handKindElement model
             ]
         , handElement deck selected
         , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
@@ -172,6 +174,19 @@ view { deck, selected, hands, discards } =
                 |> Css.Global.body
             ]
         ]
+
+
+handKindElement : Model -> Html Msg
+handKindElement { deck, selected } =
+    let
+        mHand =
+            deck |> Maybe.map (Deck.getHand selected)
+
+        mHandKind =
+            mHand
+                |> Maybe.andThen Scoring.getHandKind
+    in
+    span [] [ text <| "Hand: " ++ Scoring.handKindToString mHandKind ]
 
 
 handElement : Maybe Deck.Deck -> EverySet.EverySet UUID.UUID -> Html Msg

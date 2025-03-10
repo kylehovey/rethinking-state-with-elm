@@ -1,6 +1,7 @@
 module Model.Deck exposing (..)
 
 import EverySet
+import GenericDict as Dict
 import Model.Card as Card
 import Random
 import Random.List as RandomList
@@ -13,6 +14,35 @@ type alias Deck =
     , discarded : List Card.Card
     , handSize : Int
     }
+
+
+catMaybes : List (Maybe a) -> List a
+catMaybes xs =
+    xs
+        |> List.foldl
+            (\mx acc ->
+                case mx of
+                    Nothing ->
+                        acc
+
+                    Just x ->
+                        List.append acc [ x ]
+            )
+            []
+
+
+getHand : EverySet.EverySet UUID.UUID -> Deck -> List Card.Card
+getHand selected deck =
+    let
+        cardPairs =
+            deck.hand |> List.map (\card -> ( card.id, card ))
+
+        handLookup =
+            Dict.fromList UUID.toString cardPairs
+    in
+    EverySet.toList selected
+        |> List.map (\cardId -> Dict.get UUID.toString cardId handLookup)
+        |> catMaybes
 
 
 draw : Int -> Deck -> Deck
