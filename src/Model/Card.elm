@@ -33,6 +33,25 @@ type alias Card =
     }
 
 
+type SortOrder
+    = BySuit
+    | ByRank
+
+
+sortHand : SortOrder -> List Card -> List Card
+sortHand order =
+    let
+        comparison =
+            case order of
+                BySuit ->
+                    suitToOrder << (\{ suit } -> suit)
+
+                ByRank ->
+                    rankToOrder << (\{ rank } -> rank)
+    in
+    List.sortBy comparison
+
+
 {-| (name, order, color)
 -}
 suitMetadata : Suit -> ( String, Int, ( Int, Int, Int ) )
@@ -58,6 +77,15 @@ suitToString suit =
             suitMetadata suit
     in
     name
+
+
+suitToOrder : Suit -> Int
+suitToOrder suit =
+    let
+        ( _, order, _ ) =
+            suitMetadata suit
+    in
+    order
 
 
 suitToColor : Suit -> ( Int, Int, Int )
@@ -121,6 +149,15 @@ rankToString rank =
             rankMetadata rank
     in
     name
+
+
+rankToOrder : Rank -> Int
+rankToOrder rank =
+    let
+        ( _, order, _ ) =
+            rankMetadata rank
+    in
+    order
 
 
 {-| The first playing card in the Unicode block for each suit
