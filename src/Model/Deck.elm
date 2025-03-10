@@ -1,191 +1,16 @@
 module Model.Deck exposing (..)
 
 import EverySet
+import Model.Card as Card
 import Random
 import Random.List as RandomList
 import UUID
 
 
-type Suit
-    = Spade
-    | Heart
-    | Diamond
-    | Club
-
-
-type Rank
-    = Ace
-    | Two
-    | Three
-    | Four
-    | Five
-    | Six
-    | Seven
-    | Eight
-    | Nine
-    | Ten
-    | Jack
-    | Queen
-    | King
-
-
-{-| (name, order, color)
--}
-suitMetadata : Suit -> ( String, Int, ( Int, Int, Int ) )
-suitMetadata suit =
-    case suit of
-        Spade ->
-            ( "Spades", 0, ( 50, 48, 39 ) )
-
-        Club ->
-            ( "Clubs", 1, ( 69, 133, 136 ) )
-
-        Heart ->
-            ( "Hearts", 2, ( 251, 73, 52 ) )
-
-        Diamond ->
-            ( "Diamonds", 3, ( 250, 189, 47 ) )
-
-
-suitToString : Suit -> String
-suitToString suit =
-    let
-        ( name, _, _ ) =
-            suitMetadata suit
-    in
-    name
-
-
-suitToColor : Suit -> ( Int, Int, Int )
-suitToColor suit =
-    let
-        ( _, _, color ) =
-            suitMetadata suit
-    in
-    color
-
-
-{-| (name, order, score)
--}
-rankMetadata : Rank -> ( String, Int, Int )
-rankMetadata rank =
-    case rank of
-        Ace ->
-            ( "Ace", 0, 11 )
-
-        Two ->
-            ( "Two", 1, 2 )
-
-        Three ->
-            ( "Three", 2, 3 )
-
-        Four ->
-            ( "Four", 3, 4 )
-
-        Five ->
-            ( "Five", 4, 5 )
-
-        Six ->
-            ( "Six", 5, 6 )
-
-        Seven ->
-            ( "Seven", 6, 7 )
-
-        Eight ->
-            ( "Eight", 7, 8 )
-
-        Nine ->
-            ( "Nine", 8, 9 )
-
-        Ten ->
-            ( "Ten", 9, 10 )
-
-        Jack ->
-            ( "Jack", 10, 10 )
-
-        Queen ->
-            ( "Queen", 11, 10 )
-
-        King ->
-            ( "King", 12, 10 )
-
-
-rankToString : Rank -> String
-rankToString rank =
-    let
-        ( name, _, _ ) =
-            rankMetadata rank
-    in
-    name
-
-
-{-| The first playing card in the Unicode block for each suit
--}
-aceOfSuit : Suit -> Int
-aceOfSuit suit =
-    let
-        ace =
-            case suit of
-                Spade ->
-                    '🂡'
-
-                Heart ->
-                    '🂱'
-
-                Diamond ->
-                    '🃁'
-
-                Club ->
-                    '🃑'
-    in
-    Char.toCode ace
-
-
-cardToUnicode : Card -> String
-cardToUnicode { suit, rank } =
-    let
-        ( _, rankOrder, _ ) =
-            rankMetadata rank
-    in
-    (aceOfSuit suit + rankOrder)
-        |> Char.fromCode
-        |> String.fromChar
-
-
-allSuits : List Suit
-allSuits =
-    [ Spade, Club, Heart, Diamond ]
-
-
-allRanks : List Rank
-allRanks =
-    [ Two
-    , Three
-    , Four
-    , Five
-    , Six
-    , Seven
-    , Eight
-    , Nine
-    , Ten
-    , Jack
-    , Queen
-    , King
-    , Ace
-    ]
-
-
-type alias Card =
-    { id : UUID.UUID
-    , suit : Suit
-    , rank : Rank
-    }
-
-
 type alias Deck =
-    { hand : List Card
-    , deck : List Card
-    , discarded : List Card
+    { hand : List Card.Card
+    , deck : List Card.Card
+    , discarded : List Card.Card
     , handSize : Int
     }
 
@@ -233,11 +58,11 @@ shuffle ({ deck } as original) =
             (\shuffled -> { original | deck = shuffled })
 
 
-mkCard : Suit -> Rank -> Random.Generator Card
+mkCard : Card.Suit -> Card.Rank -> Random.Generator Card.Card
 mkCard suit rank =
     UUID.generator
         |> Random.map
-            (\uuid -> Card uuid suit rank)
+            (\uuid -> Card.Card uuid suit rank)
 
 
 {-| This is a really common operation in Haskell, but we don't have
@@ -271,10 +96,10 @@ mkDeck : () -> Random.Generator Deck
 mkDeck _ =
     let
         cardGen =
-            allSuits
+            Card.allSuits
                 |> List.concatMap
                     (\suit ->
-                        allRanks
+                        Card.allRanks
                             |> List.map (\rank -> mkCard suit rank)
                     )
     in

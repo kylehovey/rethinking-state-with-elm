@@ -7,6 +7,7 @@ import EverySet
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (onClick)
+import Model.Card as Card
 import Model.Deck as Deck
 import Random
 import Task
@@ -207,7 +208,7 @@ handElement mDeck selected =
                 )
 
 
-cardElement : Msg -> Bool -> Deck.Card -> Html Msg
+cardElement : Msg -> Bool -> Card.Card -> Html Msg
 cardElement msg selected card =
     div
         [ css
@@ -229,7 +230,7 @@ cardElement msg selected card =
                 , border (px 0)
                 , let
                     ( r, g, b ) =
-                        Deck.suitToColor card.suit
+                        Card.suitToColor card.suit
                   in
                   color <| rgb r g b
                 , hover
@@ -238,6 +239,6 @@ cardElement msg selected card =
                 ]
             ]
             [ text <|
-                Deck.cardToUnicode card
+                Card.cardToUnicode card
             ]
         ]
