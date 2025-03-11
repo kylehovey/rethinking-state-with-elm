@@ -226,15 +226,7 @@ view ({ deck, selected, hands, discards } as model) =
                 [ displayFlex
                 ]
             ]
-            [ button
-                [ Attributes.css
-                    [ marginTop <| px 12
-                    , width <| px 80
-                    ]
-                , onClick Discard
-                , Attributes.disabled <| EverySet.size selected == 0
-                ]
-                [ text "Discard" ]
+            [ bigButton "Play Hand" PlayHand [ Attributes.disabled <| EverySet.size selected == 0 ]
             , div
                 [ Attributes.css
                     [ displayFlex
@@ -263,15 +255,7 @@ view ({ deck, selected, hands, discards } as model) =
                     , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
                     ]
                 ]
-            , button
-                [ Attributes.css
-                    [ marginTop <| px 12
-                    , width <| px 80
-                    ]
-                , onClick PlayHand
-                , Attributes.disabled <| EverySet.size selected == 0
-                ]
-                [ text "Play Hand" ]
+            , bigButton "Discard" Discard [ Attributes.disabled <| EverySet.size selected == 0 ]
             ]
         , Css.Global.global
             [ [ backgroundColor <| rgb 60 56 54
@@ -281,6 +265,21 @@ view ({ deck, selected, hands, discards } as model) =
                 |> Css.Global.body
             ]
         ]
+
+
+bigButton : String -> Msg -> List (Attribute Msg) -> Html Msg
+bigButton content msg attributes =
+    button
+        (List.append
+            [ Attributes.css
+                [ marginTop <| px 12
+                , width <| px 80
+                ]
+            , onClick msg
+            ]
+            attributes
+        )
+        [ text content ]
 
 
 handInfoElement : Model -> Html Msg
