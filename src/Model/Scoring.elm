@@ -233,8 +233,19 @@ parseFourOfAKind =
 
 
 parseTwoPair : ScoringPredicate
-parseTwoPair _ =
-    Nothing
+parseTwoPair hand =
+    let
+        pairs =
+            groupsOfRank 2 hand
+                |> List.take 2
+
+        isPair =
+            List.length pairs == 2
+    in
+    boolToMaybe isPair
+        { kind = TwoPair
+        , scoringCards = List.concat pairs
+        }
 
 
 parseFullHouse : ScoringPredicate
