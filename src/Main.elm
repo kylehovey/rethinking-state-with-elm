@@ -187,8 +187,21 @@ view ({ deck, selected, hands, discards } as model) =
             ]
         , handElement deck selected
         , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
-        , span [ css [ marginTop <| px 12, marginBottom <| px 12 ] ] [ text <| "Sort" ]
-        , div []
+        , span
+            [ css
+                [ marginTop <| px 12
+                , marginBottom <| px 12
+                , fontWeight bold
+                ]
+            ]
+            [ text <| "Sort By" ]
+        , div
+            [ css
+                [ displayFlex
+                , justifyContent spaceBetween
+                , width <| px 100
+                ]
+            ]
             [ button [ onClick <| Sort Card.ByRank ] [ text "Rank" ]
             , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
             ]
