@@ -9578,7 +9578,6 @@ var $author$project$Main$PlayHand = {$: 'PlayHand'};
 var $author$project$Main$Sort = function (a) {
 	return {$: 'Sort', a: a};
 };
-var $rtfeldman$elm_css$Css$marginTop = $rtfeldman$elm_css$Css$prop1('margin-top');
 var $rtfeldman$elm_css$Css$width = $rtfeldman$elm_css$Css$prop1('width');
 var $author$project$Main$bigButton = F4(
 	function (content, bgColor, msg, attributes) {
@@ -9591,10 +9590,10 @@ var $author$project$Main$bigButton = F4(
 						$rtfeldman$elm_css$Html$Styled$Attributes$css(
 						_List_fromArray(
 							[
-								$rtfeldman$elm_css$Css$marginTop(
-								$rtfeldman$elm_css$Css$px(12)),
 								$rtfeldman$elm_css$Css$width(
 								$rtfeldman$elm_css$Css$px(80)),
+								$rtfeldman$elm_css$Css$height(
+								$rtfeldman$elm_css$Css$px(60)),
 								$rtfeldman$elm_css$Css$backgroundColor(bgColor),
 								$rtfeldman$elm_css$Css$borderRadius(
 								$rtfeldman$elm_css$Css$px(5)),
@@ -9619,6 +9618,11 @@ var $author$project$Main$bigButton = F4(
 				]));
 	});
 var $rtfeldman$elm_css$Css$bold = {fontWeight: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'bold'};
+var $rtfeldman$elm_css$Css$prop3 = F4(
+	function (key, argA, argB, argC) {
+		return A2($rtfeldman$elm_css$Css$property, key, argA.value + (' ' + (argB.value + (' ' + argC.value))));
+	});
+var $rtfeldman$elm_css$Css$border3 = $rtfeldman$elm_css$Css$prop3('border');
 var $elm$json$Json$Encode$bool = _Json_wrap;
 var $rtfeldman$elm_css$Html$Styled$Attributes$boolProperty = F2(
 	function (key, bool) {
@@ -9632,10 +9636,11 @@ var $rtfeldman$elm_css$Css$fontWeight = function (_v0) {
 	var value = _v0.value;
 	return A2($rtfeldman$elm_css$Css$property, 'font-weight', value);
 };
-var $rtfeldman$elm_css$Css$marginBottom = $rtfeldman$elm_css$Css$prop1('margin-bottom');
+var $rtfeldman$elm_css$Css$marginTop = $rtfeldman$elm_css$Css$prop1('margin-top');
 var $rtfeldman$elm_css$Css$padding = $rtfeldman$elm_css$Css$prop1('padding');
 var $rtfeldman$elm_css$Css$paddingLeft = $rtfeldman$elm_css$Css$prop1('padding-left');
 var $rtfeldman$elm_css$Css$paddingRight = $rtfeldman$elm_css$Css$prop1('padding-right');
+var $rtfeldman$elm_css$Css$solid = {borderStyle: $rtfeldman$elm_css$Css$Structure$Compatible, textDecorationStyle: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'solid'};
 var $rtfeldman$elm_css$Css$spaceAround = $rtfeldman$elm_css$Css$prop1('space-around');
 var $rtfeldman$elm_css$Html$Styled$span = $rtfeldman$elm_css$Html$Styled$node('span');
 var $author$project$Style$Colors$yellowDim = A3($rtfeldman$elm_css$Css$rgb, 215, 153, 33);
@@ -9646,7 +9651,14 @@ var $author$project$Main$playerControls = function (model) {
 			[
 				$rtfeldman$elm_css$Html$Styled$Attributes$css(
 				_List_fromArray(
-					[$rtfeldman$elm_css$Css$displayFlex]))
+					[
+						$rtfeldman$elm_css$Css$displayFlex,
+						$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$spaceAround),
+						$rtfeldman$elm_css$Css$width(
+						$rtfeldman$elm_css$Css$px(320)),
+						$rtfeldman$elm_css$Css$marginTop(
+						$rtfeldman$elm_css$Css$px(20))
+					]))
 			]),
 		_List_fromArray(
 			[
@@ -9670,10 +9682,20 @@ var $author$project$Main$playerControls = function (model) {
 								$rtfeldman$elm_css$Css$displayFlex,
 								$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column),
 								$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
+								$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$spaceAround),
+								$rtfeldman$elm_css$Css$height(
+								$rtfeldman$elm_css$Css$px(60)),
 								$rtfeldman$elm_css$Css$paddingLeft(
 								$rtfeldman$elm_css$Css$px(12)),
 								$rtfeldman$elm_css$Css$paddingRight(
-								$rtfeldman$elm_css$Css$px(12))
+								$rtfeldman$elm_css$Css$px(12)),
+								A3(
+								$rtfeldman$elm_css$Css$border3,
+								$rtfeldman$elm_css$Css$px(1),
+								$rtfeldman$elm_css$Css$solid,
+								$author$project$Style$Colors$fg),
+								$rtfeldman$elm_css$Css$borderRadius(
+								$rtfeldman$elm_css$Css$px(5))
 							]))
 					]),
 				_List_fromArray(
@@ -9685,10 +9707,6 @@ var $author$project$Main$playerControls = function (model) {
 								$rtfeldman$elm_css$Html$Styled$Attributes$css(
 								_List_fromArray(
 									[
-										$rtfeldman$elm_css$Css$marginTop(
-										$rtfeldman$elm_css$Css$px(12)),
-										$rtfeldman$elm_css$Css$marginBottom(
-										$rtfeldman$elm_css$Css$px(12)),
 										$rtfeldman$elm_css$Css$fontWeight($rtfeldman$elm_css$Css$bold)
 									]))
 							]),
@@ -9800,10 +9818,6 @@ var $author$project$Style$Colors$bg1 = A3($rtfeldman$elm_css$Css$rgb, 60, 56, 54
 var $author$project$Style$Colors$bg2 = A3($rtfeldman$elm_css$Css$rgb, 80, 73, 69);
 var $author$project$Style$Colors$bg3 = A3($rtfeldman$elm_css$Css$rgb, 102, 92, 84);
 var $author$project$Style$Colors$blueDim = A3($rtfeldman$elm_css$Css$rgb, 69, 133, 136);
-var $rtfeldman$elm_css$Css$prop3 = F4(
-	function (key, argA, argB, argC) {
-		return A2($rtfeldman$elm_css$Css$property, key, argA.value + (' ' + (argB.value + (' ' + argC.value))));
-	});
 var $rtfeldman$elm_css$Css$textShadow3 = $rtfeldman$elm_css$Css$prop3('text-shadow');
 var $author$project$Main$blindInfo = function (model) {
 	return A2(
@@ -10196,6 +10210,7 @@ var $author$project$Main$handScoreDisplay = function (model) {
 };
 var $rtfeldman$elm_css$Css$marginLeft = $rtfeldman$elm_css$Css$prop1('margin-left');
 var $rtfeldman$elm_css$Css$marginRight = $rtfeldman$elm_css$Css$prop1('margin-right');
+var $rtfeldman$elm_css$Css$marginBottom = $rtfeldman$elm_css$Css$prop1('margin-bottom');
 var $author$project$Main$numberCard = F3(
 	function (label, n, textColor) {
 		return A2(
@@ -10363,7 +10378,6 @@ var $author$project$Main$roundScoreDisplay = function (model) {
 					]))
 			]));
 };
-var $rtfeldman$elm_css$Css$solid = {borderStyle: $rtfeldman$elm_css$Css$Structure$Compatible, textDecorationStyle: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'solid'};
 var $rtfeldman$elm_css$Css$spaceBetween = $rtfeldman$elm_css$Css$prop1('space-between');
 var $author$project$Main$runInfo = function (model) {
 	var hands = model.hands;

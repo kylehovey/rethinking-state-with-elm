@@ -538,6 +538,9 @@ playerControls model =
     div
         [ Attributes.css
             [ displayFlex
+            , justifyContent spaceAround
+            , width <| px 320
+            , marginTop <| px 20
             ]
         ]
         [ bigButton "Play Hand"
@@ -552,15 +555,17 @@ playerControls model =
                 [ displayFlex
                 , flexDirection column
                 , alignItems center
+                , justifyContent spaceAround
+                , height <| px 60
                 , paddingLeft <| px 12
                 , paddingRight <| px 12
+                , border3 (px 1) solid Colors.fg
+                , borderRadius <| px 5
                 ]
             ]
             [ span
                 [ Attributes.css
-                    [ marginTop <| px 12
-                    , marginBottom <| px 12
-                    , fontWeight bold
+                    [ fontWeight bold
                     ]
                 ]
                 [ text <| "Sort Hand" ]
@@ -614,8 +619,8 @@ bigButton content bgColor msg attributes =
     button
         (List.append
             [ Attributes.css
-                [ marginTop <| px 12
-                , width <| px 80
+                [ width <| px 80
+                , height <| px 60
                 , backgroundColor bgColor
                 , borderRadius <| px 5
                 , border <| px 0
