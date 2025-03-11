@@ -193,6 +193,11 @@ subscriptions _ =
 -- VIEW
 
 
+imports : List String
+imports =
+    [ "assets/balatro.otf" ]
+
+
 view : Model -> Html Msg
 view model =
     nav []
@@ -229,11 +234,12 @@ view model =
             ]
         , Css.Global.global
             [ [ backgroundColor Colors.bg
-              , fontFamilies [ "Arial" ]
+              , fontFamilies [ "Balatro" ]
               , color Colors.fg
               ]
                 |> Css.Global.body
             ]
+        , node "link" [ Attributes.href "fonts.css", Attributes.rel "stylesheet" ] []
         ]
 
 
