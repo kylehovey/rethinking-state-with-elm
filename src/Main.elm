@@ -509,6 +509,7 @@ numberCard label n textColor =
                 , justifyContent center
                 , alignItems center
                 , backgroundColor Colors.bg2
+                , marginTop <| px 5
                 ]
             ]
             [ span

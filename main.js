@@ -10217,7 +10217,9 @@ var $author$project$Main$numberCard = F3(
 									$rtfeldman$elm_css$Css$displayFlex,
 									$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
 									$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
-									$rtfeldman$elm_css$Css$backgroundColor($author$project$Style$Colors$bg2)
+									$rtfeldman$elm_css$Css$backgroundColor($author$project$Style$Colors$bg2),
+									$rtfeldman$elm_css$Css$marginTop(
+									$rtfeldman$elm_css$Css$px(5))
 								]))
 						]),
 					_List_fromArray(
