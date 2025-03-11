@@ -29,3 +29,7 @@ I wrote the slides using [Marp](https://marp.app/). To view the presentation, ei
 Make sure you have [Elm](https://elm-lang.org/) installed and run `elm reactor` to launch the example app.
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/bb0e32a0-8da1-4034-bd22-3cf0bbbaa3de" />
+
+### Using the Time Traveling Debugger
+
+If you'd like to demo the time traveling debugger, build the app using `elm make --debug src/Main.elm` and open `index.html` in your browser.
