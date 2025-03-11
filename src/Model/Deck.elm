@@ -3,6 +3,7 @@ module Model.Deck exposing (..)
 import EverySet
 import GenericDict as Dict
 import Model.Card as Card
+import Model.Util as Util
 import Random
 import Random.List as RandomList
 import UUID
@@ -100,31 +101,6 @@ mkCard suit rank =
             (\uuid -> Card.Card uuid suit rank)
 
 
-{-| This is a really common operation in Haskell, but we don't have
-a word for it in Elm-land. Sequencing takes a nested structure
-and collects the outer structure, then places the results in
-the inner structure. In this case, it's collapsing a list of
-eventual random results into one random result of a list.
-
-The overall benefit: we don't have to do `n` random calls, just one.
-
-In Haskell, this is often used to collect multiple database queries
-into one query (e.g. users <- sequence userQueries).
-
-In Elm, we need to define this for each pair of structures as we cannot
-generally type `sequence` without Higher Kinded Types. The type of sequence
-in Haskell is:
-
-sequence :: (Monad m) => t (m a) -> m (t a)
-
--}
-sequenceRandom : List (Random.Generator a) -> Random.Generator (List a)
-sequenceRandom =
-    List.foldr
-        (Random.map2 (::))
-        (Random.constant [])
-
-
 {-| This generates a basic 52 card deck as the product of all suits and ranks.
 -}
 mkDeck : () -> Random.Generator Deck
@@ -138,7 +114,7 @@ mkDeck _ =
                             |> List.map (\rank -> mkCard suit rank)
                     )
     in
-    sequenceRandom cardGen
+    Util.sequenceRandom cardGen
         |> Random.map
             (\deck ->
                 { hand = []

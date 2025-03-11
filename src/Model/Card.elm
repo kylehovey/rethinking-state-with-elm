@@ -1,5 +1,6 @@
 module Model.Card exposing (..)
 
+import Model.Util as Util
 import UUID
 
 
@@ -72,30 +73,18 @@ suitMetadata suit =
 
 
 suitToString : Suit -> String
-suitToString suit =
-    let
-        ( name, _, _ ) =
-            suitMetadata suit
-    in
-    name
+suitToString =
+    Util.first3 << suitMetadata
 
 
 suitToOrder : Suit -> Int
-suitToOrder suit =
-    let
-        ( _, order, _ ) =
-            suitMetadata suit
-    in
-    order
+suitToOrder =
+    Util.second3 << suitMetadata
 
 
 suitToColor : Suit -> ( Int, Int, Int )
-suitToColor suit =
-    let
-        ( _, _, color ) =
-            suitMetadata suit
-    in
-    color
+suitToColor =
+    Util.third3 << suitMetadata
 
 
 {-| (name, order, score)
@@ -144,30 +133,18 @@ rankMetadata rank =
 
 
 rankToString : Rank -> String
-rankToString rank =
-    let
-        ( name, _, _ ) =
-            rankMetadata rank
-    in
-    name
+rankToString =
+    Util.first3 << rankMetadata
 
 
 rankToOrder : Rank -> Int
-rankToOrder rank =
-    let
-        ( _, order, _ ) =
-            rankMetadata rank
-    in
-    order
+rankToOrder =
+    Util.second3 << rankMetadata
 
 
 rankToChips : Rank -> Int
-rankToChips rank =
-    let
-        ( _, _, chips ) =
-            rankMetadata rank
-    in
-    chips
+rankToChips =
+    Util.third3 << rankMetadata
 
 
 {-| Order by rank alone, counting Ace as high

@@ -2,6 +2,7 @@ module Model.Scoring exposing (..)
 
 import GenericDict as Dict
 import Model.Card as Card
+import Model.Util as Util
 
 
 type HandKind
@@ -57,35 +58,13 @@ handKindToString mHandKind =
 
 
 groupBySuit : List Card.Card -> Dict.Dict Card.Suit (List Card.Card)
-groupBySuit hand =
-    hand
-        |> List.map (\card -> ( card.suit, card ))
-        |> List.foldl
-            (\( suit, card ) acc ->
-                case Dict.get Card.suitToString suit acc of
-                    Nothing ->
-                        Dict.insert Card.suitToString suit [ card ] acc
-
-                    Just existing ->
-                        Dict.insert Card.suitToString suit (List.append existing [ card ]) acc
-            )
-            Dict.empty
+groupBySuit =
+    Util.groupByKey (\{ suit } -> suit) Card.suitToString
 
 
 groupByRank : List Card.Card -> Dict.Dict Card.Rank (List Card.Card)
-groupByRank hand =
-    hand
-        |> List.map (\card -> ( card.rank, card ))
-        |> List.foldl
-            (\( rank, card ) acc ->
-                case Dict.get Card.rankToString rank acc of
-                    Nothing ->
-                        Dict.insert Card.rankToString rank [ card ] acc
-
-                    Just existing ->
-                        Dict.insert Card.rankToString rank (List.append existing [ card ]) acc
-            )
-            Dict.empty
+groupByRank =
+    Util.groupByKey (\{ rank } -> rank) Card.rankToString
 
 
 hasFlush : List Card.Card -> Bool
@@ -99,24 +78,6 @@ hasFlush hand =
     List.any (\x -> x >= 5) suitCounts
 
 
-zip : List a -> List b -> List ( a, b )
-zip =
-    List.map2 Tuple.pair
-
-
-forwardDifference : List Int -> List Int
-forwardDifference values =
-    let
-        shifted =
-            List.drop 1 values
-
-        zipped =
-            zip values shifted
-    in
-    zipped
-        |> List.map (\( a, b ) -> a - b)
-
-
 hasStraight : List Card.Card -> Bool
 hasStraight hand =
     let
@@ -128,7 +89,7 @@ hasStraight hand =
             List.length hand
 
         differences =
-            forwardDifference sortedOrder
+            Util.forwardDifference sortedOrder
 
         isHighStraight =
             sortedOrder == [ 0, 4, 3, 2, 1 ]
