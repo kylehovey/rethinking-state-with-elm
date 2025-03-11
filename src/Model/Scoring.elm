@@ -81,20 +81,22 @@ hasFlush hand =
 hasStraight : List Card.Card -> Bool
 hasStraight hand =
     let
-        sortedOrder =
+        sortedRanks =
             Card.sortHand Card.ByRank hand
-                |> List.map (\{ rank } -> Card.rankToOrder rank)
+                |> List.map (\{ rank } -> rank)
 
         handLength =
             List.length hand
 
         differences =
-            Util.forwardDifference sortedOrder
+            sortedRanks
+                |> List.map Card.rankToOrder
+                |> Util.forwardDifference
 
         isHighStraight =
-            sortedOrder == [ 0, 4, 3, 2, 1 ]
+            sortedRanks == [ Card.Ace, Card.Five, Card.Four, Card.Three, Card.Two ]
     in
-    (handLength == 5) && (List.all (\x -> x == 1) differences || isHighStraight)
+    (handLength == 5) && (List.all ((==) 1) differences || isHighStraight)
 
 
 rankCounts : List Card.Card -> List Int
@@ -107,7 +109,7 @@ rankCounts hand =
 hasNOfKind : Int -> List Card.Card -> Bool
 hasNOfKind n hand =
     rankCounts hand
-        |> List.any (\count -> count == n)
+        |> List.any ((==) n)
 
 
 hasTwoPair : List Card.Card -> Bool
@@ -115,7 +117,7 @@ hasTwoPair hand =
     let
         pairs =
             rankCounts hand
-                |> List.filter (\x -> x == 2)
+                |> List.filter ((==) 2)
     in
     List.length pairs == 2
 

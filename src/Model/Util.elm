@@ -24,6 +24,28 @@ third3 ( _, _, c ) =
 
 
 
+-- MAYBE
+
+
+{-| Given a list of Maybe values, return a new list containing
+all of the Just values
+-}
+catMaybes : List (Maybe a) -> List a
+catMaybes xs =
+    xs
+        |> List.foldl
+            (\mx acc ->
+                case mx of
+                    Nothing ->
+                        acc
+
+                    Just x ->
+                        List.append acc [ x ]
+            )
+            []
+
+
+
 -- DICT
 
 

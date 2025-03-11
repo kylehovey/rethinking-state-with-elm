@@ -17,21 +17,6 @@ type alias Deck =
     }
 
 
-catMaybes : List (Maybe a) -> List a
-catMaybes xs =
-    xs
-        |> List.foldl
-            (\mx acc ->
-                case mx of
-                    Nothing ->
-                        acc
-
-                    Just x ->
-                        List.append acc [ x ]
-            )
-            []
-
-
 getHand : EverySet.EverySet UUID.UUID -> Deck -> List Card.Card
 getHand selected deck =
     let
@@ -43,7 +28,7 @@ getHand selected deck =
     in
     EverySet.toList selected
         |> List.map (\cardId -> Dict.get UUID.toString cardId handLookup)
-        |> catMaybes
+        |> Util.catMaybes
 
 
 draw : Int -> Card.SortOrder -> Deck -> Deck
