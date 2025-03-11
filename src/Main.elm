@@ -237,6 +237,7 @@ view model =
               , fontFamilies [ "Balatro" ]
               , color Colors.fg
               , letterSpacing <| px 1
+              , margin <| px 0
               ]
                 |> Css.Global.body
             ]
@@ -255,6 +256,10 @@ runInfo ({ hands, discards } as model) =
             , width <| px 350
             , alignItems center
             , backgroundColor Colors.bg1
+            , marginLeft <| px 5
+            , marginRight <| px 5
+            , borderLeft3 (px 3) solid Colors.blue
+            , borderRight3 (px 3) solid Colors.blue
             ]
         ]
         [ blindInfo model
@@ -454,7 +459,9 @@ handScoreDisplay model =
                     , width <| pct 30
                     , borderRadius <| px 5
                     , justifyContent flexEnd
+                    , alignItems center
                     , padding <| px 5
+                    , height <| px 30
                     ]
                 ]
                 [ span [] [ text <| String.fromInt baseChips ] ]
@@ -472,7 +479,9 @@ handScoreDisplay model =
                     , width <| pct 30
                     , borderRadius <| px 5
                     , justifyContent flexStart
+                    , alignItems center
                     , padding <| px 5
+                    , height <| px 30
                     ]
                 ]
                 [ span [] [ text <| String.fromInt baseMult ] ]
@@ -503,7 +512,7 @@ numberCard label n textColor =
         , div
             [ Attributes.css
                 [ width <| px 50
-                , height <| px 40
+                , height <| px 35
                 , borderRadius <| px 5
                 , displayFlex
                 , justifyContent center

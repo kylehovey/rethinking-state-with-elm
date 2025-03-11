@@ -9568,6 +9568,7 @@ var $rtfeldman$elm_css$Html$Styled$Attributes$href = function (url) {
 	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'href', url);
 };
 var $rtfeldman$elm_css$Css$letterSpacing = $rtfeldman$elm_css$Css$prop1('letter-spacing');
+var $rtfeldman$elm_css$Css$margin = $rtfeldman$elm_css$Css$prop1('margin');
 var $rtfeldman$elm_css$Html$Styled$nav = $rtfeldman$elm_css$Html$Styled$node('nav');
 var $rtfeldman$elm_css$Css$PercentageUnits = {$: 'PercentageUnits'};
 var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PercentageUnits, '%');
@@ -9799,7 +9800,6 @@ var $author$project$Style$Colors$bg1 = A3($rtfeldman$elm_css$Css$rgb, 60, 56, 54
 var $author$project$Style$Colors$bg2 = A3($rtfeldman$elm_css$Css$rgb, 80, 73, 69);
 var $author$project$Style$Colors$bg3 = A3($rtfeldman$elm_css$Css$rgb, 102, 92, 84);
 var $author$project$Style$Colors$blueDim = A3($rtfeldman$elm_css$Css$rgb, 69, 133, 136);
-var $rtfeldman$elm_css$Css$margin = $rtfeldman$elm_css$Css$prop1('margin');
 var $rtfeldman$elm_css$Css$prop3 = F4(
 	function (key, argA, argB, argC) {
 		return A2($rtfeldman$elm_css$Css$property, key, argA.value + (' ' + (argB.value + (' ' + argC.value))));
@@ -9991,6 +9991,8 @@ var $author$project$Main$blindInfo = function (model) {
 					]))
 			]));
 };
+var $rtfeldman$elm_css$Css$borderLeft3 = $rtfeldman$elm_css$Css$prop3('border-left');
+var $rtfeldman$elm_css$Css$borderRight3 = $rtfeldman$elm_css$Css$prop3('border-right');
 var $elm$core$Maybe$andThen = F2(
 	function (callback, maybeValue) {
 		if (maybeValue.$ === 'Just') {
@@ -10123,8 +10125,11 @@ var $author$project$Main$handScoreDisplay = function (model) {
 										$rtfeldman$elm_css$Css$borderRadius(
 										$rtfeldman$elm_css$Css$px(5)),
 										$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$flexEnd),
+										$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
 										$rtfeldman$elm_css$Css$padding(
-										$rtfeldman$elm_css$Css$px(5))
+										$rtfeldman$elm_css$Css$px(5)),
+										$rtfeldman$elm_css$Css$height(
+										$rtfeldman$elm_css$Css$px(30))
 									]))
 							]),
 						_List_fromArray(
@@ -10168,8 +10173,11 @@ var $author$project$Main$handScoreDisplay = function (model) {
 										$rtfeldman$elm_css$Css$borderRadius(
 										$rtfeldman$elm_css$Css$px(5)),
 										$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$flexStart),
+										$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
 										$rtfeldman$elm_css$Css$padding(
-										$rtfeldman$elm_css$Css$px(5))
+										$rtfeldman$elm_css$Css$px(5)),
+										$rtfeldman$elm_css$Css$height(
+										$rtfeldman$elm_css$Css$px(30))
 									]))
 							]),
 						_List_fromArray(
@@ -10186,6 +10194,8 @@ var $author$project$Main$handScoreDisplay = function (model) {
 					]))
 			]));
 };
+var $rtfeldman$elm_css$Css$marginLeft = $rtfeldman$elm_css$Css$prop1('margin-left');
+var $rtfeldman$elm_css$Css$marginRight = $rtfeldman$elm_css$Css$prop1('margin-right');
 var $author$project$Main$numberCard = F3(
 	function (label, n, textColor) {
 		return A2(
@@ -10235,7 +10245,7 @@ var $author$project$Main$numberCard = F3(
 									$rtfeldman$elm_css$Css$width(
 									$rtfeldman$elm_css$Css$px(50)),
 									$rtfeldman$elm_css$Css$height(
-									$rtfeldman$elm_css$Css$px(40)),
+									$rtfeldman$elm_css$Css$px(35)),
 									$rtfeldman$elm_css$Css$borderRadius(
 									$rtfeldman$elm_css$Css$px(5)),
 									$rtfeldman$elm_css$Css$displayFlex,
@@ -10272,7 +10282,6 @@ var $author$project$Main$numberCard = F3(
 						]))
 				]));
 	});
-var $rtfeldman$elm_css$Css$marginLeft = $rtfeldman$elm_css$Css$prop1('margin-left');
 var $author$project$Main$roundScoreDisplay = function (model) {
 	return A2(
 		$rtfeldman$elm_css$Html$Styled$div,
@@ -10354,6 +10363,7 @@ var $author$project$Main$roundScoreDisplay = function (model) {
 					]))
 			]));
 };
+var $rtfeldman$elm_css$Css$solid = {borderStyle: $rtfeldman$elm_css$Css$Structure$Compatible, textDecorationStyle: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'solid'};
 var $rtfeldman$elm_css$Css$spaceBetween = $rtfeldman$elm_css$Css$prop1('space-between');
 var $author$project$Main$runInfo = function (model) {
 	var hands = model.hands;
@@ -10374,7 +10384,21 @@ var $author$project$Main$runInfo = function (model) {
 						$rtfeldman$elm_css$Css$width(
 						$rtfeldman$elm_css$Css$px(350)),
 						$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
-						$rtfeldman$elm_css$Css$backgroundColor($author$project$Style$Colors$bg1)
+						$rtfeldman$elm_css$Css$backgroundColor($author$project$Style$Colors$bg1),
+						$rtfeldman$elm_css$Css$marginLeft(
+						$rtfeldman$elm_css$Css$px(5)),
+						$rtfeldman$elm_css$Css$marginRight(
+						$rtfeldman$elm_css$Css$px(5)),
+						A3(
+						$rtfeldman$elm_css$Css$borderLeft3,
+						$rtfeldman$elm_css$Css$px(3),
+						$rtfeldman$elm_css$Css$solid,
+						$author$project$Style$Colors$blue),
+						A3(
+						$rtfeldman$elm_css$Css$borderRight3,
+						$rtfeldman$elm_css$Css$px(3),
+						$rtfeldman$elm_css$Css$solid,
+						$author$project$Style$Colors$blue)
 					]))
 			]),
 		_List_fromArray(
@@ -10478,7 +10502,9 @@ var $author$project$Main$view = function (model) {
 									['Balatro'])),
 								$rtfeldman$elm_css$Css$color($author$project$Style$Colors$fg),
 								$rtfeldman$elm_css$Css$letterSpacing(
-								$rtfeldman$elm_css$Css$px(1))
+								$rtfeldman$elm_css$Css$px(1)),
+								$rtfeldman$elm_css$Css$margin(
+								$rtfeldman$elm_css$Css$px(0))
 							]))
 					])),
 				A3(
