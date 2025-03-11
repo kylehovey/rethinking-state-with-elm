@@ -199,7 +199,7 @@ view model =
         [ div
             [ Attributes.css
                 [ displayFlex
-                , flexDirection column
+                , flexDirection row
                 ]
             ]
             [ runInfo model
@@ -209,7 +209,8 @@ view model =
                     , flexDirection column
                     , alignItems center
                     , justifyContent flexEnd
-                    , height <| vh 70
+                    , height <| vh 90
+                    , width <| pct 100
                     ]
                 ]
                 [ handElement model
@@ -234,11 +235,62 @@ runInfo ({ hands, discards } as model) =
             , flexDirection column
             , padding <| px 20
             , fontSize <| rem 1.2
+            , width <| px 250
             ]
         ]
-        [ span [] [ text <| ("Hands: " ++ String.fromInt hands) ]
-        , span [] [ text <| ("Discards: " ++ String.fromInt discards) ]
-        , handInfoElement model
+        [ handInfoElement model
+        , div
+            [ Attributes.css
+                [ displayFlex
+                , flexDirection row
+                , justifyContent spaceBetween
+                ]
+            ]
+            [ numberCard "Hands" hands Colors.blueDim
+            , numberCard "Discards" discards Colors.redDim
+            ]
+        ]
+
+
+numberCard : String -> Int -> Color -> Html Msg
+numberCard label n bgColor =
+    div
+        [ Attributes.css
+            [ displayFlex
+            , flexDirection column
+            , alignItems center
+            , justifyContent center
+            , width <| px 100
+            , height <| px 80
+            , backgroundColor Colors.bg3
+            , borderRadius <| px 5
+            ]
+        ]
+        [ span
+            [ Attributes.css
+                [ marginBottom <| px 2
+                ]
+            ]
+            [ text label ]
+        , div
+            [ Attributes.css
+                [ width <| px 50
+                , height <| px 40
+                , borderRadius <| px 5
+                , displayFlex
+                , justifyContent center
+                , alignItems center
+                , backgroundColor bgColor
+                ]
+            ]
+            [ span
+                [ Attributes.css
+                    [ textShadow3 (px 2) (px 2) Colors.bg2
+                    , fontWeight bold
+                    ]
+                ]
+                [ text <| String.fromInt n ]
+            ]
         ]
 
 
