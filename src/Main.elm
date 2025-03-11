@@ -245,12 +245,12 @@ runInfo ({ hands, discards } as model) =
             , flexDirection column
             , padding <| px 20
             , fontSize <| rem 1.2
-            , width <| px 250
+            , width <| px 350
             , alignItems center
             , backgroundColor Colors.bg1
             ]
         ]
-        [ handInfoElement model
+        [ blindInfo model
         , roundScoreDisplay model
         , handScoreDisplay model
         , div
@@ -267,6 +267,94 @@ runInfo ({ hands, discards } as model) =
         ]
 
 
+blindInfo : Model -> Html Msg
+blindInfo model =
+    div
+        [ Attributes.css
+            [ displayFlex
+            , alignItems center
+            , flexDirection column
+            , width <| pct 100
+            , height <| px 200
+            , margin <| px 10
+            ]
+        ]
+        [ div
+            [ Attributes.css
+                [ displayFlex
+                , alignItems center
+                , width <| pct 100
+                , backgroundColor Colors.blue
+                , height <| px 50
+                , margin <| px 10
+                , borderRadius <| px 5
+                , justifyContent center
+                ]
+            ]
+            [ span
+                [ Attributes.css
+                    [ textShadow3 (px 2) (px 2) Colors.bg2
+                    , fontWeight bold
+                    ]
+                ]
+                [ text "Small Blind" ]
+            ]
+        , div
+            [ Attributes.css
+                [ displayFlex
+                , alignItems center
+                , width <| pct 100
+                , backgroundColor Colors.blueDim
+                , height <| px 150
+                , borderRadius <| px 5
+                ]
+            ]
+            [ div
+                [ Attributes.css
+                    [ width <| px 80
+                    , height <| px 80
+                    , backgroundColor Colors.blue
+                    , borderRadius <| px 80
+                    , displayFlex
+                    , alignItems center
+                    , justifyContent center
+                    , flexDirection column
+                    , margin <| px 10
+                    ]
+                ]
+                [ span
+                    [ Attributes.css
+                        [ textShadow3 (px 2) (px 2) Colors.bg2
+                        ]
+                    ]
+                    [ text "Small" ]
+                , span
+                    [ Attributes.css
+                        [ textShadow3 (px 2) (px 2) Colors.bg2
+                        ]
+                    ]
+                    [ text "Blind" ]
+                ]
+            , div
+                [ Attributes.css
+                    [ backgroundColor Colors.bg3
+                    , width <| pct 60
+                    , height <| px 60
+                    , displayFlex
+                    , flexDirection column
+                    , alignItems center
+                    , justifyContent spaceAround
+                    , borderRadius <| px 5
+                    ]
+                ]
+                [ span [] [ text "Score at least" ]
+                , span []
+                    [ text <| "⛀ " ++ String.fromInt model.scoreToBeat ]
+                ]
+            ]
+        ]
+
+
 roundScoreDisplay : Model -> Html Msg
 roundScoreDisplay model =
     div
@@ -275,7 +363,7 @@ roundScoreDisplay model =
             , backgroundColor Colors.bg
             , width <| pct 100
             , borderRadius <| px 5
-            , height <| px 60
+            , height <| px 80
             , justifyContent center
             , alignItems center
             ]
@@ -328,11 +416,11 @@ handScoreDisplay model =
             [ displayFlex
             , width <| pct 100
             , backgroundColor Colors.bg
-            , margin <| px 5
+            , margin <| px 10
             , alignItems center
             , flexDirection column
             , borderRadius <| px 5
-            , height <| px 90
+            , height <| px 100
             , justifyContent flexEnd
             ]
         ]
@@ -366,7 +454,7 @@ handScoreDisplay model =
             , span
                 [ Attributes.css
                     [ color Colors.redDim
-                    , margin <| px 5
+                    , margin <| px 10
                     ]
                 ]
                 [ text "X" ]
@@ -393,7 +481,7 @@ numberCard label n textColor =
             , flexDirection column
             , alignItems center
             , justifyContent center
-            , width <| px 100
+            , width <| px 130
             , height <| px 80
             , backgroundColor Colors.bg
             , borderRadius <| px 5
@@ -500,18 +588,6 @@ bigButton content bgColor msg attributes =
             attributes
         )
         [ text content ]
-
-
-handInfoElement : Model -> Html Msg
-handInfoElement { roundScore, scoreToBeat } =
-    div
-        [ Attributes.css
-            [ displayFlex
-            , flexDirection column
-            ]
-        ]
-        [ span [] [ text <| "Winning Score: " ++ String.fromInt scoreToBeat ]
-        ]
 
 
 handElement : Model -> Html Msg
