@@ -35,3 +35,7 @@ Make sure you have [Elm](https://elm-lang.org/) installed and run `elm reactor` 
 ### Using the Time Traveling Debugger
 
 If you'd like to demo the time traveling debugger, build the app using `elm make --debug src/Main.elm` and open `index.html` in your browser.
+
+# Thank You
+
+I wanted to give a shoutout to my coworker Taylor who figured out how to set up a shader as a website background. You can find his project where he did that [here](https://github.com/tfausak/daylatro) (it's the source for our company Balatro weekly seed leaderboard).

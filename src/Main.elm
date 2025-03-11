@@ -240,7 +240,7 @@ view model =
               ]
                 |> Css.Global.body
             ]
-        , node "link" [ Attributes.href "fonts.css", Attributes.rel "stylesheet" ] []
+        , node "link" [ Attributes.href "src/fonts.css", Attributes.rel "stylesheet" ] []
         ]
 
 
