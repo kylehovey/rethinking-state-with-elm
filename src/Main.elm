@@ -39,6 +39,8 @@ type alias Model =
     , discards : Int
     , deck : Maybe Deck.Deck
     , sortOrder : Card.SortOrder
+    , roundScore : Int
+    , scoreToBeat : Int
     }
 
 
@@ -49,6 +51,8 @@ init _ =
       , discards = 3
       , deck = Nothing
       , sortOrder = Card.ByRank
+      , roundScore = 0
+      , scoreToBeat = 300
       }
     , generateDeck
     )
@@ -64,6 +68,7 @@ type Msg
     | DeckGenerated Deck.Deck
     | Draw Int
     | Discard
+    | PlayHand
     | Sort Card.SortOrder
     | Shuffle
     | Shuffled Deck.Deck
@@ -129,6 +134,33 @@ update msg model =
                     , msgTask (Draw (EverySet.size model.selected))
                     )
 
+        PlayHand ->
+            case ( model.deck, model.hands, EverySet.size model.selected ) of
+                ( _, _, 0 ) ->
+                    ( model, Cmd.none )
+
+                ( Nothing, _, _ ) ->
+                    ( model, Cmd.none )
+
+                ( _, 0, _ ) ->
+                    ( model, Cmd.none )
+
+                ( Just deck, hands, _ ) ->
+                    let
+                        score =
+                            deck
+                                |> Deck.getHand model.selected
+                                |> Scoring.getHandScore
+                    in
+                    ( { model
+                        | deck = Just <| Deck.discard model.selected deck
+                        , selected = EverySet.empty
+                        , roundScore = model.roundScore + score
+                        , hands = hands - 1
+                      }
+                    , msgTask (Draw (EverySet.size model.selected))
+                    )
+
         GenerateDeck ->
             ( model, generateDeck )
 
@@ -189,31 +221,57 @@ view ({ deck, selected, hands, discards } as model) =
             , handInfoElement model
             ]
         , handElement deck selected
-        , button
-            [ Attributes.css
-                [ marginTop <| px 12
-                ]
-            , onClick Discard
-            , Attributes.disabled <| EverySet.size selected == 0
-            ]
-            [ text "Discard" ]
-        , span
-            [ Attributes.css
-                [ marginTop <| px 12
-                , marginBottom <| px 12
-                , fontWeight bold
-                ]
-            ]
-            [ text <| "Sort By" ]
         , div
             [ Attributes.css
                 [ displayFlex
-                , justifyContent spaceBetween
-                , width <| px 100
                 ]
             ]
-            [ button [ onClick <| Sort Card.ByRank ] [ text "Rank" ]
-            , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
+            [ button
+                [ Attributes.css
+                    [ marginTop <| px 12
+                    , width <| px 80
+                    ]
+                , onClick Discard
+                , Attributes.disabled <| EverySet.size selected == 0
+                ]
+                [ text "Discard" ]
+            , div
+                [ Attributes.css
+                    [ displayFlex
+                    , flexDirection column
+                    , alignItems center
+                    , paddingLeft <| px 12
+                    , paddingRight <| px 12
+                    ]
+                ]
+                [ span
+                    [ Attributes.css
+                        [ marginTop <| px 12
+                        , marginBottom <| px 12
+                        , fontWeight bold
+                        ]
+                    ]
+                    [ text <| "Sort By" ]
+                , div
+                    [ Attributes.css
+                        [ displayFlex
+                        , justifyContent spaceBetween
+                        , width <| px 100
+                        ]
+                    ]
+                    [ button [ onClick <| Sort Card.ByRank ] [ text "Rank" ]
+                    , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
+                    ]
+                ]
+            , button
+                [ Attributes.css
+                    [ marginTop <| px 12
+                    , width <| px 80
+                    ]
+                , onClick PlayHand
+                , Attributes.disabled <| EverySet.size selected == 0
+                ]
+                [ text "Play Hand" ]
             ]
         , Css.Global.global
             [ [ backgroundColor <| rgb 60 56 54
@@ -226,7 +284,7 @@ view ({ deck, selected, hands, discards } as model) =
 
 
 handInfoElement : Model -> Html Msg
-handInfoElement { deck, selected } =
+handInfoElement { deck, selected, roundScore, scoreToBeat } =
     let
         mHand =
             deck |> Maybe.map (Deck.getHand selected)
@@ -236,12 +294,10 @@ handInfoElement { deck, selected } =
                 |> Maybe.andThen Scoring.parseHand
                 |> Maybe.map (\{ kind } -> kind)
 
-        mHandScore =
-            mHand
-                |> Maybe.map Scoring.getHandScore
-
-        score =
-            Maybe.withDefault 0 mHandScore
+        { baseChips, baseMult } =
+            mHandKind
+                |> Maybe.map Scoring.getScoreInfoForKind
+                |> Maybe.withDefault { baseChips = 0, baseMult = 0 }
     in
     div
         [ Attributes.css
@@ -250,7 +306,9 @@ handInfoElement { deck, selected } =
             ]
         ]
         [ span [] [ text <| "Hand: " ++ Scoring.handKindToString mHandKind ]
-        , span [] [ text <| "Score: " ++ String.fromInt score ]
+        , span [] [ text <| "Round Score: " ++ String.fromInt roundScore ]
+        , span [] [ text <| "Winning Score: " ++ String.fromInt scoreToBeat ]
+        , span [] [ text <| String.fromInt baseChips ++ " x " ++ String.fromInt baseMult ]
         ]
 
 
