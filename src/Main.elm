@@ -170,7 +170,7 @@ view ({ deck, selected, hands, discards } as model) =
         , div [ css [ displayFlex, flexDirection column ] ]
             [ span [] [ text <| ("Hands: " ++ String.fromInt hands) ]
             , span [] [ text <| ("Discards: " ++ String.fromInt discards) ]
-            , handKindElement model
+            , handInfoElement model
             ]
         , handElement deck selected
         , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
@@ -186,8 +186,8 @@ view ({ deck, selected, hands, discards } as model) =
         ]
 
 
-handKindElement : Model -> Html Msg
-handKindElement { deck, selected } =
+handInfoElement : Model -> Html Msg
+handInfoElement { deck, selected } =
     let
         mHand =
             deck |> Maybe.map (Deck.getHand selected)
@@ -196,8 +196,23 @@ handKindElement { deck, selected } =
             mHand
                 |> Maybe.andThen Scoring.parseHand
                 |> Maybe.map (\{ kind } -> kind)
+
+        mHandScore =
+            mHand
+                |> Maybe.map Scoring.getHandScore
+
+        score =
+            Maybe.withDefault 0 mHandScore
     in
-    span [] [ text <| "Hand: " ++ Scoring.handKindToString mHandKind ]
+    div
+        [ css
+            [ displayFlex
+            , flexDirection column
+            ]
+        ]
+        [ span [] [ text <| "Hand: " ++ Scoring.handKindToString mHandKind ]
+        , span [] [ text <| "Score: " ++ String.fromInt score ]
+        ]
 
 
 handElement : Maybe Deck.Deck -> EverySet.EverySet UUID.UUID -> Html Msg

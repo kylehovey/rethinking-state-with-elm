@@ -18,6 +18,53 @@ type HandKind
     | RoyalFlush
 
 
+type alias HandKindScore =
+    { baseChips : Int
+    , baseMult : Int
+    }
+
+
+getScoreInfoForKind : HandKind -> HandKindScore
+getScoreInfoForKind kind =
+    case kind of
+        HighCard ->
+            { baseChips = 5, baseMult = 1 }
+
+        Pair ->
+            { baseChips = 10, baseMult = 2 }
+
+        TwoPair ->
+            { baseChips = 20, baseMult = 2 }
+
+        ThreeOfAKind ->
+            { baseChips = 30, baseMult = 3 }
+
+        Straight ->
+            { baseChips = 30, baseMult = 4 }
+
+        Flush ->
+            { baseChips = 35, baseMult = 4 }
+
+        FullHouse ->
+            { baseChips = 40, baseMult = 4 }
+
+        FourOfAKind ->
+            { baseChips = 60, baseMult = 7 }
+
+        StraightFlush ->
+            { baseChips = 100, baseMult = 8 }
+
+        RoyalFlush ->
+            { baseChips = 100, baseMult = 8 }
+
+
+getChipsInHand : List Card.Card -> Int
+getChipsInHand hand =
+    hand
+        |> List.map (\{ rank } -> Card.rankToChips rank)
+        |> List.sum
+
+
 handKindToString : Maybe HandKind -> String
 handKindToString mHandKind =
     case mHandKind of
@@ -280,3 +327,20 @@ scoringRules =
 parseHand : List Card.Card -> Maybe ScoringHand
 parseHand =
     evalRules scoringRules
+
+
+getHandScore : List Card.Card -> Int
+getHandScore hand =
+    case parseHand hand of
+        Nothing ->
+            0
+
+        Just { kind, scoringCards } ->
+            let
+                { baseChips, baseMult } =
+                    getScoreInfoForKind kind
+
+                chipsInHand =
+                    getChipsInHand scoringCards
+            in
+            (baseChips + chipsInHand) * baseMult
