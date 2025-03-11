@@ -9304,7 +9304,6 @@ var $rtfeldman$elm_css$Css$Global$global = function (snippets) {
 var $author$project$Main$ToggleCardSelected = function (a) {
 	return {$: 'ToggleCardSelected', a: a};
 };
-var $author$project$Style$Colors$bg2 = A3($rtfeldman$elm_css$Css$rgb, 80, 73, 69);
 var $rtfeldman$elm_css$Css$borderRadius = $rtfeldman$elm_css$Css$prop1('border-radius');
 var $rtfeldman$elm_css$Css$prop5 = F6(
 	function (key, argA, argB, argC, argD, argE) {
@@ -9479,6 +9478,29 @@ var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
 		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
 };
 var $rtfeldman$elm_css$Css$paddingTop = $rtfeldman$elm_css$Css$prop1('padding-top');
+var $rtfeldman$elm_css$Css$rgba = F4(
+	function (r, g, b, alpha) {
+		return {
+			alpha: alpha,
+			blue: b,
+			color: $rtfeldman$elm_css$Css$Structure$Compatible,
+			green: g,
+			red: r,
+			value: A2(
+				$rtfeldman$elm_css$Css$cssFunction,
+				'rgba',
+				_Utils_ap(
+					A2(
+						$elm$core$List$map,
+						$elm$core$String$fromInt,
+						_List_fromArray(
+							[r, g, b])),
+					_List_fromArray(
+						[
+							$elm$core$String$fromFloat(alpha)
+						])))
+		};
+	});
 var $author$project$Main$handElement = function (model) {
 	var isSelected = function (card) {
 		return A2($Gizra$elm_all_set$EverySet$member, card.id, model.selected);
@@ -9502,7 +9524,8 @@ var $author$project$Main$handElement = function (model) {
 							$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
 							$rtfeldman$elm_css$Css$height(
 							$rtfeldman$elm_css$Css$px(170)),
-							$rtfeldman$elm_css$Css$backgroundColor($author$project$Style$Colors$bg2),
+							$rtfeldman$elm_css$Css$backgroundColor(
+							A4($rtfeldman$elm_css$Css$rgba, 40, 40, 40, 0.4)),
 							$rtfeldman$elm_css$Css$borderRadius(
 							$rtfeldman$elm_css$Css$px(10)),
 							A5(
@@ -9773,6 +9796,7 @@ var $rtfeldman$elm_css$VirtualDom$Styled$attribute = F2(
 	});
 var $rtfeldman$elm_css$Html$Styled$Attributes$rel = $rtfeldman$elm_css$VirtualDom$Styled$attribute('rel');
 var $author$project$Style$Colors$bg1 = A3($rtfeldman$elm_css$Css$rgb, 60, 56, 54);
+var $author$project$Style$Colors$bg2 = A3($rtfeldman$elm_css$Css$rgb, 80, 73, 69);
 var $author$project$Style$Colors$bg3 = A3($rtfeldman$elm_css$Css$rgb, 102, 92, 84);
 var $author$project$Style$Colors$blueDim = A3($rtfeldman$elm_css$Css$rgb, 69, 133, 136);
 var $rtfeldman$elm_css$Css$margin = $rtfeldman$elm_css$Css$prop1('margin');

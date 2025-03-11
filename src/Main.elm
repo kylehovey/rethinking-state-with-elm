@@ -641,7 +641,7 @@ handElement model =
                     , flexDirection row
                     , justifyContent center
                     , height <| px 170
-                    , backgroundColor Colors.bg2
+                    , backgroundColor <| rgba 40 40 40 0.4
                     , borderRadius <| px 10
                     , boxShadow5 inset (px 0) (px 0) (px 10) Colors.bg
                     ]
