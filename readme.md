@@ -8,6 +8,8 @@ I wrote the slides using [Marp](https://marp.app/). To view the presentation, ei
 
 ## Neat Links
 
+I think one of the most useful links I can share here is Elm's interactive online REPL [Ellie](https://ellie-app.com/new). Go and play around with Elm there, or see some examples of what people have made.
+
 ### Docs
 
 * [Elm Language Guide](https://guide.elm-lang.org/)
