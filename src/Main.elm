@@ -166,20 +166,36 @@ view ({ deck, selected, hands, discards } as model) =
             , flexDirection column
             ]
         ]
-        [ h1 [ css [ textAlign center ] ] [ text "Elmatro" ]
-        , div [ css [ displayFlex, flexDirection column ] ]
+        [ h1
+            [ css
+                [ textAlign center
+                , fontSize <| rem 2
+                ]
+            ]
+            [ text "Elmatro" ]
+        , div
+            [ css
+                [ displayFlex
+                , flexDirection column
+                , padding <| px 20
+                , fontSize <| rem 1.2
+                ]
+            ]
             [ span [] [ text <| ("Hands: " ++ String.fromInt hands) ]
             , span [] [ text <| ("Discards: " ++ String.fromInt discards) ]
             , handInfoElement model
             ]
         , handElement deck selected
         , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
+        , span [ css [ marginTop <| px 12, marginBottom <| px 12 ] ] [ text <| "Sort" ]
         , div []
-            [ button [ css [ marginTop <| px 12 ], onClick <| Sort Card.ByRank ] [ text "Rank" ]
-            , button [ css [ marginTop <| px 12 ], onClick <| Sort Card.BySuit ] [ text "Suit" ]
+            [ button [ onClick <| Sort Card.ByRank ] [ text "Rank" ]
+            , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
             ]
         , Css.Global.global
             [ [ backgroundColor <| rgb 60 56 54
+              , fontFamilies [ "Arial" ]
+              , color <| rgb 235 219 178
               ]
                 |> Css.Global.body
             ]
