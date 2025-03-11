@@ -53,6 +53,24 @@ $( "body" ).data(); // { foo: 52, bar: { isManual: true }, baz: [ 1, 2, 3 ] }
 
 ---
 
+## Batteries Included
+
+| JS         | Elm            |
+|------------|----------------|
+| npm        | elm install    |
+| webpack    | elm make       |
+| react      | elm components |
+| redux      | elm TEA model  |
+| typescript | elm            |
+
+---
+
+## The Big Question
+
+* How does it handle state?
+
+---
+
 ## Haskell State Monad
 
 * Likely the inspiration for Elm's state model
