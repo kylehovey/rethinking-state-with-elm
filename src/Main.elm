@@ -298,7 +298,7 @@ roundScoreDisplay model =
                 , width <| pct 50
                 , justifyContent flexEnd
                 , backgroundColor Colors.bg2
-                , marginLeft <| px 10
+                , marginLeft <| px 15
                 , padding <| px 5
                 , borderRadius <| px 5
                 ]
