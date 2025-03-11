@@ -395,6 +395,7 @@ playerControls model =
             ]
         ]
         [ bigButton "Play Hand"
+            Colors.blue
             PlayHand
             [ Attributes.disabled <|
                 EverySet.size model.selected
@@ -429,6 +430,7 @@ playerControls model =
                 ]
             ]
         , bigButton "Discard"
+            Colors.red
             Discard
             [ Attributes.disabled <|
                 EverySet.size model.selected
@@ -437,13 +439,20 @@ playerControls model =
         ]
 
 
-bigButton : String -> Msg -> List (Attribute Msg) -> Html Msg
-bigButton content msg attributes =
+bigButton : String -> Color -> Msg -> List (Attribute Msg) -> Html Msg
+bigButton content bgColor msg attributes =
     button
         (List.append
             [ Attributes.css
                 [ marginTop <| px 12
                 , width <| px 80
+                , backgroundColor bgColor
+                , borderRadius <| px 5
+                , border <| px 0
+                , color Colors.fg
+                , hover
+                    [ cursor pointer
+                    ]
                 ]
             , onClick msg
             ]
