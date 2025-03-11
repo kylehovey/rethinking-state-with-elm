@@ -184,11 +184,21 @@ parseStraight hand =
                 |> List.map Card.rankToOrder
                 |> Util.forwardDifference
 
+        -- We need to check for Ace straights explicitly because the
+        -- sort order is different than the rank order. We could avoid
+        --this with a custom rank-only sort, but I like only using one sort.
         isHighStraight =
+            sortedRanks == [ Card.Ace, Card.King, Card.Queen, Card.Jack, Card.Ten ]
+
+        isLowStraight =
             sortedRanks == [ Card.Ace, Card.Five, Card.Four, Card.Three, Card.Two ]
 
         isStraight =
-            (handLength == 5) && (List.all ((==) 1) differences || isHighStraight)
+            (handLength == 5)
+                && (List.all ((==) 1) differences
+                        || isHighStraight
+                        || isLowStraight
+                   )
     in
     boolToMaybe isStraight
         { kind = Straight
