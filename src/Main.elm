@@ -458,7 +458,7 @@ playerControls model =
                     , fontWeight bold
                     ]
                 ]
-                [ text <| "Sort By" ]
+                [ text <| "Sort Hand" ]
             , div
                 [ Attributes.css
                     [ displayFlex
