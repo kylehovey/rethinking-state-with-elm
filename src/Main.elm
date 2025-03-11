@@ -236,6 +236,7 @@ view model =
             [ [ backgroundColor Colors.bg
               , fontFamilies [ "Balatro" ]
               , color Colors.fg
+              , letterSpacing <| px 1
               ]
                 |> Css.Global.body
             ]
@@ -556,12 +557,36 @@ playerControls model =
             , div
                 [ Attributes.css
                     [ displayFlex
-                    , justifyContent spaceBetween
+                    , justifyContent spaceAround
                     , width <| px 100
                     ]
                 ]
-                [ button [ onClick <| Sort Card.ByRank ] [ text "Rank" ]
-                , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
+                [ button
+                    [ Attributes.css
+                        [ fontFamilies [ "Balatro" ]
+                        , backgroundColor <| Colors.yellowDim
+                        , border <| px 0
+                        , borderRadius <| px 5
+                        , padding <| px 5
+                        , hover [ cursor pointer ]
+                        , color Colors.fg
+                        ]
+                    , onClick <| Sort Card.ByRank
+                    ]
+                    [ text "Rank" ]
+                , button
+                    [ Attributes.css
+                        [ fontFamilies [ "Balatro" ]
+                        , backgroundColor <| Colors.yellowDim
+                        , border <| px 0
+                        , borderRadius <| px 5
+                        , padding <| px 5
+                        , hover [ cursor pointer ]
+                        , color Colors.fg
+                        ]
+                    , onClick <| Sort Card.BySuit
+                    ]
+                    [ text "Suit" ]
                 ]
             ]
         , bigButton "Discard"
@@ -585,6 +610,7 @@ bigButton content bgColor msg attributes =
                 , borderRadius <| px 5
                 , border <| px 0
                 , color Colors.fg
+                , fontFamilies [ "Balatro" ]
                 , hover
                     [ cursor pointer
                     ]
