@@ -10,3 +10,5 @@ I wrote the slides using Marp. To view the presentation, either open `index.html
 ## Running The Example App
 
 Make sure you have Elm installed and run `elm reactor` to launch the example app.
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/bb0e32a0-8da1-4034-bd22-3cf0bbbaa3de" />
