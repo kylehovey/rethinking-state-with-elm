@@ -194,7 +194,8 @@ handKindElement { deck, selected } =
 
         mHandKind =
             mHand
-                |> Maybe.andThen Scoring.getHandKind
+                |> Maybe.andThen Scoring.parseHand
+                |> Maybe.map (\{ kind } -> kind)
     in
     span [] [ text <| "Hand: " ++ Scoring.handKindToString mHandKind ]
 

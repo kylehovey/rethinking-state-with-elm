@@ -67,19 +67,63 @@ groupByRank =
     Util.groupByKey (\{ rank } -> rank) Card.rankToString
 
 
-hasFlush : List Card.Card -> Bool
-hasFlush hand =
+type alias ScoringHand =
+    { kind : HandKind
+    , scoringCards : List Card.Card
+    }
+
+
+type alias ScoringPredicate =
+    List Card.Card -> Maybe ScoringHand
+
+
+evalPredicate : ScoringPredicate -> List Card.Card -> Bool
+evalPredicate predicate =
+    Util.isJust << predicate
+
+
+boolToMaybe : Bool -> a -> Maybe a
+boolToMaybe value a =
+    if value then
+        Just a
+
+    else
+        Nothing
+
+
+groupsOfRank : Int -> List Card.Card -> List (List Card.Card)
+groupsOfRank n hand =
+    groupByRank hand
+        |> Dict.toList
+        |> List.filter ((==) n << List.length << Tuple.second)
+        |> List.map Tuple.second
+
+
+firstGroupOfRank : Int -> List Card.Card -> Maybe (List Card.Card)
+firstGroupOfRank n hand =
+    groupsOfRank n hand
+        |> List.head
+
+
+parseFlush : ScoringPredicate
+parseFlush hand =
     let
         suitCounts =
             groupBySuit hand
                 |> Dict.toList
                 |> List.map (List.length << Tuple.second)
+
+        isFlush =
+            List.any (\x -> x >= 5) suitCounts
     in
-    List.any (\x -> x >= 5) suitCounts
+    boolToMaybe isFlush
+        { kind = Flush
+        , scoringCards = hand
+        }
 
 
-hasStraight : List Card.Card -> Bool
-hasStraight hand =
+parseStraight : ScoringPredicate
+parseStraight hand =
     let
         sortedRanks =
             Card.sortHand Card.ByRank hand
@@ -95,83 +139,144 @@ hasStraight hand =
 
         isHighStraight =
             sortedRanks == [ Card.Ace, Card.Five, Card.Four, Card.Three, Card.Two ]
+
+        isStraight =
+            (handLength == 5) && (List.all ((==) 1) differences || isHighStraight)
     in
-    (handLength == 5) && (List.all ((==) 1) differences || isHighStraight)
+    boolToMaybe isStraight
+        { kind = Straight
+        , scoringCards = hand
+        }
 
 
-rankCounts : List Card.Card -> List Int
-rankCounts hand =
-    groupByRank hand
-        |> Dict.toList
-        |> List.map (List.length << Tuple.second)
+parseNOfKind : Int -> HandKind -> ScoringPredicate
+parseNOfKind n kind hand =
+    firstGroupOfRank n hand
+        |> Maybe.map
+            (\group ->
+                { kind = kind
+                , scoringCards = group
+                }
+            )
 
 
-hasNOfKind : Int -> List Card.Card -> Bool
-hasNOfKind n hand =
-    rankCounts hand
-        |> List.any ((==) n)
+parsePair : ScoringPredicate
+parsePair =
+    parseNOfKind 2 Pair
 
 
-hasTwoPair : List Card.Card -> Bool
-hasTwoPair hand =
+parseThreeOfAKind : ScoringPredicate
+parseThreeOfAKind =
+    parseNOfKind 3 ThreeOfAKind
+
+
+parseFourOfAKind : ScoringPredicate
+parseFourOfAKind =
+    parseNOfKind 4 FourOfAKind
+
+
+parseTwoPair : ScoringPredicate
+parseTwoPair _ =
+    Nothing
+
+
+parseFullHouse : ScoringPredicate
+parseFullHouse hand =
     let
-        pairs =
-            rankCounts hand
-                |> List.filter ((==) 2)
+        mPair =
+            firstGroupOfRank 2 hand
+
+        mToak =
+            firstGroupOfRank 3 hand
+
+        makeScoringHand pair toak =
+            { scoringCards = pair ++ toak
+            , kind = FullHouse
+            }
     in
-    List.length pairs == 2
+    Maybe.map2 makeScoringHand mPair mToak
 
 
-hasFullHouse : List Card.Card -> Bool
-hasFullHouse hand =
+parseHighCard : ScoringPredicate
+parseHighCard hand =
     let
-        counts =
-            rankCounts hand
+        mHighCard =
+            Card.sortHand Card.ByRank hand
+                |> List.head
     in
-    List.member 3 counts && List.member 2 counts
+    mHighCard
+        |> Maybe.map
+            (\card ->
+                { kind = HighCard
+                , scoringCards = [ card ]
+                }
+            )
 
 
-hasRoyalStraight : List Card.Card -> Bool
-hasRoyalStraight hand =
+parseStraightFlush : ScoringPredicate
+parseStraightFlush hand =
+    let
+        isStraight =
+            evalPredicate parseStraight hand
+
+        isFlush =
+            evalPredicate parseFlush hand
+    in
+    boolToMaybe (isStraight && isFlush)
+        { kind = StraightFlush
+        , scoringCards = hand
+        }
+
+
+parseRoyalFlush : ScoringPredicate
+parseRoyalFlush hand =
     let
         sortedOrder =
             Card.sortHand Card.ByRank hand
                 |> List.map (\{ rank } -> rank)
+
+        isRoyalStraight =
+            sortedOrder == [ Card.Ace, Card.King, Card.Queen, Card.Jack, Card.Ten ]
+
+        isFlush =
+            evalPredicate parseFlush hand
     in
-    sortedOrder == [ Card.Ace, Card.King, Card.Queen, Card.Jack, Card.Ten ]
+    boolToMaybe (isFlush && isRoyalStraight)
+        { kind = RoyalFlush
+        , scoringCards = hand
+        }
 
 
-getHandKind : List Card.Card -> Maybe HandKind
-getHandKind hand =
-    if hasFlush hand && hasRoyalStraight hand then
-        Just RoyalFlush
+evalRules : List ScoringPredicate -> List Card.Card -> Maybe ScoringHand
+evalRules rules hand =
+    rules
+        |> List.foldl
+            (\predicate acc ->
+                case acc of
+                    Just _ ->
+                        acc
 
-    else if hasFlush hand && hasStraight hand then
-        Just StraightFlush
+                    Nothing ->
+                        predicate hand
+            )
+            Nothing
 
-    else if hasNOfKind 4 hand then
-        Just FourOfAKind
 
-    else if hasFullHouse hand then
-        Just FullHouse
+scoringRules : List ScoringPredicate
+scoringRules =
+    [ parseRoyalFlush
+    , parseStraightFlush
+    , parseFourOfAKind
+    , parseFullHouse
+    , parseFlush
+    , parseStraight
+    , parseThreeOfAKind
+    , parseTwoPair
+    , parsePair
+    , parseHighCard
+    ]
 
-    else if hasFlush hand then
-        Just Flush
 
-    else if hasStraight hand then
-        Just Straight
-
-    else if hasNOfKind 3 hand then
-        Just ThreeOfAKind
-
-    else if hasTwoPair hand then
-        Just TwoPair
-
-    else if hasNOfKind 2 hand then
-        Just Pair
-
-    else if List.length hand > 0 then
-        Just HighCard
-
-    else
-        Nothing
+parseHand : List Card.Card -> Maybe ScoringHand
+parseHand =
+    evalRules scoringRules

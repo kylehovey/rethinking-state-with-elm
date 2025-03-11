@@ -27,6 +27,16 @@ third3 ( _, _, c ) =
 -- MAYBE
 
 
+isJust : Maybe a -> Bool
+isJust ma =
+    case ma of
+        Nothing ->
+            False
+
+        Just _ ->
+            True
+
+
 {-| Given a list of Maybe values, return a new list containing
 all of the Just values
 -}
