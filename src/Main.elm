@@ -193,69 +193,27 @@ subscriptions _ =
 
 
 view : Model -> Html Msg
-view ({ deck, selected, hands, discards } as model) =
-    nav
-        [ Attributes.css
-            [ displayFlex
-            , alignItems center
-            , flexDirection column
-            ]
-        ]
-        [ h1
-            [ Attributes.css
-                [ textAlign center
-                , fontSize <| rem 2
-                ]
-            ]
-            [ text "Elmatro" ]
-        , div
+view model =
+    nav []
+        [ div
             [ Attributes.css
                 [ displayFlex
                 , flexDirection column
-                , padding <| px 20
-                , fontSize <| rem 1.2
                 ]
             ]
-            [ span [] [ text <| ("Hands: " ++ String.fromInt hands) ]
-            , span [] [ text <| ("Discards: " ++ String.fromInt discards) ]
-            , handInfoElement model
-            ]
-        , handElement deck selected
-        , div
-            [ Attributes.css
-                [ displayFlex
-                ]
-            ]
-            [ bigButton "Play Hand" PlayHand [ Attributes.disabled <| EverySet.size selected == 0 ]
+            [ runInfo model
             , div
                 [ Attributes.css
                     [ displayFlex
                     , flexDirection column
                     , alignItems center
-                    , paddingLeft <| px 12
-                    , paddingRight <| px 12
+                    , justifyContent flexEnd
+                    , height <| vh 70
                     ]
                 ]
-                [ span
-                    [ Attributes.css
-                        [ marginTop <| px 12
-                        , marginBottom <| px 12
-                        , fontWeight bold
-                        ]
-                    ]
-                    [ text <| "Sort By" ]
-                , div
-                    [ Attributes.css
-                        [ displayFlex
-                        , justifyContent spaceBetween
-                        , width <| px 100
-                        ]
-                    ]
-                    [ button [ onClick <| Sort Card.ByRank ] [ text "Rank" ]
-                    , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
-                    ]
+                [ handElement model
+                , playerControls model
                 ]
-            , bigButton "Discard" Discard [ Attributes.disabled <| EverySet.size selected == 0 ]
             ]
         , Css.Global.global
             [ [ backgroundColor <| rgb 60 56 54
@@ -263,6 +221,72 @@ view ({ deck, selected, hands, discards } as model) =
               , color <| rgb 235 219 178
               ]
                 |> Css.Global.body
+            ]
+        ]
+
+
+runInfo : Model -> Html Msg
+runInfo ({ hands, discards } as model) =
+    div
+        [ Attributes.css
+            [ displayFlex
+            , flexDirection column
+            , padding <| px 20
+            , fontSize <| rem 1.2
+            ]
+        ]
+        [ span [] [ text <| ("Hands: " ++ String.fromInt hands) ]
+        , span [] [ text <| ("Discards: " ++ String.fromInt discards) ]
+        , handInfoElement model
+        ]
+
+
+playerControls : Model -> Html Msg
+playerControls model =
+    div
+        [ Attributes.css
+            [ displayFlex
+            ]
+        ]
+        [ bigButton "Play Hand"
+            PlayHand
+            [ Attributes.disabled <|
+                EverySet.size model.selected
+                    == 0
+            ]
+        , div
+            [ Attributes.css
+                [ displayFlex
+                , flexDirection column
+                , alignItems center
+                , paddingLeft <| px 12
+                , paddingRight <| px 12
+                ]
+            ]
+            [ span
+                [ Attributes.css
+                    [ marginTop <| px 12
+                    , marginBottom <| px 12
+                    , fontWeight bold
+                    ]
+                ]
+                [ text <| "Sort By" ]
+            , div
+                [ Attributes.css
+                    [ displayFlex
+                    , justifyContent spaceBetween
+                    , width <| px 100
+                    ]
+                ]
+                [ button [ onClick <| Sort Card.ByRank ] [ text "Rank" ]
+                , button [ onClick <| Sort Card.BySuit ] [ text "Suit" ]
+                ]
+            ]
+        , bigButton "Discard"
+            Discard
+            [ Attributes.disabled <|
+                EverySet.size model.selected
+                    == 0
             ]
         ]
 
@@ -311,13 +335,13 @@ handInfoElement { deck, selected, roundScore, scoreToBeat } =
         ]
 
 
-handElement : Maybe Deck.Deck -> EverySet.EverySet UUID.UUID -> Html Msg
-handElement mDeck selected =
+handElement : Model -> Html Msg
+handElement model =
     let
         isSelected card =
-            EverySet.member card.id selected
+            EverySet.member card.id model.selected
     in
-    case mDeck of
+    case model.deck of
         Nothing ->
             div [] []
 
