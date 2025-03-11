@@ -1,6 +1,8 @@
 module Model.Card exposing (..)
 
+import Css
 import Model.Util as Util
+import Style.Colors as Colors
 import UUID
 
 
@@ -56,20 +58,20 @@ sortHand order =
 
 {-| (name, order, color)
 -}
-suitMetadata : Suit -> ( String, Int, ( Int, Int, Int ) )
+suitMetadata : Suit -> ( String, Int, Css.Color )
 suitMetadata suit =
     case suit of
         Spade ->
-            ( "Spades", 0, ( 50, 48, 39 ) )
+            ( "Spades", 0, Colors.gray )
 
         Club ->
-            ( "Clubs", 1, ( 69, 133, 136 ) )
+            ( "Clubs", 1, Colors.blue )
 
         Heart ->
-            ( "Hearts", 2, ( 251, 73, 52 ) )
+            ( "Hearts", 2, Colors.red )
 
         Diamond ->
-            ( "Diamonds", 3, ( 250, 189, 47 ) )
+            ( "Diamonds", 3, Colors.yellow )
 
 
 suitToString : Suit -> String
@@ -82,7 +84,7 @@ suitToOrder =
     Util.second3 << suitMetadata
 
 
-suitToColor : Suit -> ( Int, Int, Int )
+suitToColor : Suit -> Css.Color
 suitToColor =
     Util.third3 << suitMetadata
 

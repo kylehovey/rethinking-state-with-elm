@@ -11,6 +11,7 @@ import Model.Card as Card
 import Model.Deck as Deck
 import Model.Scoring as Scoring
 import Random
+import Style.Colors as Colors
 import Task
 import UUID
 
@@ -216,9 +217,9 @@ view model =
                 ]
             ]
         , Css.Global.global
-            [ [ backgroundColor <| rgb 60 56 54
+            [ [ backgroundColor Colors.bg
               , fontFamilies [ "Arial" ]
-              , color <| rgb 235 219 178
+              , color Colors.fg
               ]
                 |> Css.Global.body
             ]
@@ -353,9 +354,9 @@ handElement model =
                     , flexDirection row
                     , justifyContent center
                     , height <| px 170
-                    , backgroundColor <| rgb 80 73 69
+                    , backgroundColor Colors.bg2
                     , borderRadius <| px 10
-                    , boxShadow5 inset (px 0) (px 0) (px 10) (rgb 60 56 54)
+                    , boxShadow5 inset (px 0) (px 0) (px 10) Colors.bg
                     ]
                 ]
                 (deck.hand
@@ -389,11 +390,7 @@ cardElement msg selected card =
                 , textAlign center
                 , backgroundColor transparent
                 , border (px 0)
-                , let
-                    ( r, g, b ) =
-                        Card.suitToColor card.suit
-                  in
-                  color <| rgb r g b
+                , color <| Card.suitToColor card.suit
                 , hover
                     [ cursor pointer
                     ]
