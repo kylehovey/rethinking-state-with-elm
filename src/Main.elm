@@ -236,14 +236,18 @@ runInfo ({ hands, discards } as model) =
             , padding <| px 20
             , fontSize <| rem 1.2
             , width <| px 250
+            , alignItems center
+            , backgroundColor Colors.bg1
             ]
         ]
         [ handInfoElement model
+        , handScoreDisplay model
         , div
             [ Attributes.css
                 [ displayFlex
                 , flexDirection row
                 , justifyContent spaceBetween
+                , width <| pct 100
                 ]
             ]
             [ numberCard "Hands" hands Colors.blueDim
@@ -252,8 +256,86 @@ runInfo ({ hands, discards } as model) =
         ]
 
 
+handScoreDisplay : Model -> Html Msg
+handScoreDisplay model =
+    let
+        mHand =
+            model.deck |> Maybe.map (Deck.getHand model.selected)
+
+        mHandKind =
+            mHand
+                |> Maybe.andThen Scoring.parseHand
+                |> Maybe.map (\{ kind } -> kind)
+
+        { baseChips, baseMult } =
+            mHandKind
+                |> Maybe.map Scoring.getScoreInfoForKind
+                |> Maybe.withDefault { baseChips = 0, baseMult = 0 }
+    in
+    div
+        [ Attributes.css
+            [ displayFlex
+            , width <| pct 100
+            , backgroundColor Colors.bg
+            , margin <| px 5
+            , alignItems center
+            , flexDirection column
+            , borderRadius <| px 5
+            , height <| px 90
+            , justifyContent flexEnd
+            ]
+        ]
+        [ span
+            [ Attributes.css
+                [ paddingTop <| px 10
+                ]
+            ]
+            [ text <| Scoring.handKindToString mHandKind ]
+        , div
+            [ Attributes.css
+                [ displayFlex
+                , width <| pct 100
+                , justifyContent center
+                , alignItems center
+                , paddingTop <| px 10
+                , paddingBottom <| px 10
+                ]
+            ]
+            [ div
+                [ Attributes.css
+                    [ displayFlex
+                    , backgroundColor Colors.blueDim
+                    , width <| pct 30
+                    , borderRadius <| px 5
+                    , justifyContent flexEnd
+                    , padding <| px 5
+                    ]
+                ]
+                [ span [] [ text <| String.fromInt baseChips ] ]
+            , span
+                [ Attributes.css
+                    [ color Colors.redDim
+                    , margin <| px 5
+                    ]
+                ]
+                [ text "X" ]
+            , div
+                [ Attributes.css
+                    [ displayFlex
+                    , backgroundColor Colors.redDim
+                    , width <| pct 30
+                    , borderRadius <| px 5
+                    , justifyContent flexStart
+                    , padding <| px 5
+                    ]
+                ]
+                [ span [] [ text <| String.fromInt baseMult ] ]
+            ]
+        ]
+
+
 numberCard : String -> Int -> Color -> Html Msg
-numberCard label n bgColor =
+numberCard label n textColor =
     div
         [ Attributes.css
             [ displayFlex
@@ -280,13 +362,14 @@ numberCard label n bgColor =
                 , displayFlex
                 , justifyContent center
                 , alignItems center
-                , backgroundColor bgColor
+                , backgroundColor Colors.bg2
                 ]
             ]
             [ span
                 [ Attributes.css
-                    [ textShadow3 (px 2) (px 2) Colors.bg2
+                    [ textShadow3 (px 2) (px 2) Colors.bg1
                     , fontWeight bold
+                    , color textColor
                     ]
                 ]
                 [ text <| String.fromInt n ]
@@ -360,31 +443,15 @@ bigButton content msg attributes =
 
 
 handInfoElement : Model -> Html Msg
-handInfoElement { deck, selected, roundScore, scoreToBeat } =
-    let
-        mHand =
-            deck |> Maybe.map (Deck.getHand selected)
-
-        mHandKind =
-            mHand
-                |> Maybe.andThen Scoring.parseHand
-                |> Maybe.map (\{ kind } -> kind)
-
-        { baseChips, baseMult } =
-            mHandKind
-                |> Maybe.map Scoring.getScoreInfoForKind
-                |> Maybe.withDefault { baseChips = 0, baseMult = 0 }
-    in
+handInfoElement { roundScore, scoreToBeat } =
     div
         [ Attributes.css
             [ displayFlex
             , flexDirection column
             ]
         ]
-        [ span [] [ text <| "Hand: " ++ Scoring.handKindToString mHandKind ]
-        , span [] [ text <| "Round Score: " ++ String.fromInt roundScore ]
+        [ span [] [ text <| "Round Score: " ++ String.fromInt roundScore ]
         , span [] [ text <| "Winning Score: " ++ String.fromInt scoreToBeat ]
-        , span [] [ text <| String.fromInt baseChips ++ " x " ++ String.fromInt baseMult ]
         ]
 
 

@@ -69,7 +69,7 @@ handKindToString : Maybe HandKind -> String
 handKindToString mHandKind =
     case mHandKind of
         Nothing ->
-            "None"
+            ""
 
         Just handKind ->
             case handKind of
