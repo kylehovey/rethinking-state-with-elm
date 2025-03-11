@@ -251,6 +251,7 @@ runInfo ({ hands, discards } as model) =
             ]
         ]
         [ handInfoElement model
+        , roundScoreDisplay model
         , handScoreDisplay model
         , div
             [ Attributes.css
@@ -263,6 +264,46 @@ runInfo ({ hands, discards } as model) =
             [ numberCard "Hands" hands Colors.blueDim
             , numberCard "Discards" discards Colors.redDim
             ]
+        ]
+
+
+roundScoreDisplay : Model -> Html Msg
+roundScoreDisplay model =
+    div
+        [ Attributes.css
+            [ displayFlex
+            , backgroundColor Colors.bg
+            , width <| pct 100
+            , borderRadius <| px 5
+            , height <| px 60
+            , justifyContent center
+            , alignItems center
+            ]
+        ]
+        [ div
+            [ Attributes.css
+                [ width <| px 50
+                , displayFlex
+                , flexDirection column
+                , alignItems center
+                ]
+            ]
+            [ span [] [ text "Round" ]
+            , span [] [ text "Score" ]
+            ]
+        , div
+            [ Attributes.css
+                [ displayFlex
+                , alignItems center
+                , width <| pct 50
+                , justifyContent flexEnd
+                , backgroundColor Colors.bg2
+                , marginLeft <| px 10
+                , padding <| px 5
+                , borderRadius <| px 5
+                ]
+            ]
+            [ text <| "⛀ " ++ String.fromInt model.roundScore ]
         ]
 
 
@@ -354,7 +395,7 @@ numberCard label n textColor =
             , justifyContent center
             , width <| px 100
             , height <| px 80
-            , backgroundColor Colors.bg3
+            , backgroundColor Colors.bg
             , borderRadius <| px 5
             ]
         ]
@@ -377,7 +418,7 @@ numberCard label n textColor =
             ]
             [ span
                 [ Attributes.css
-                    [ textShadow3 (px 2) (px 2) Colors.bg1
+                    [ textShadow3 (px 2) (px 2) Colors.bg
                     , fontWeight bold
                     , color textColor
                     ]
@@ -469,8 +510,7 @@ handInfoElement { roundScore, scoreToBeat } =
             , flexDirection column
             ]
         ]
-        [ span [] [ text <| "Round Score: " ++ String.fromInt roundScore ]
-        , span [] [ text <| "Winning Score: " ++ String.fromInt scoreToBeat ]
+        [ span [] [ text <| "Winning Score: " ++ String.fromInt scoreToBeat ]
         ]
 
 
