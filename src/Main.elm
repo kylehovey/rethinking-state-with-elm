@@ -5,7 +5,7 @@ import Css exposing (..)
 import Css.Global
 import EverySet
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (css)
+import Html.Styled.Attributes as Attributes
 import Html.Styled.Events exposing (onClick)
 import Model.Card as Card
 import Model.Deck as Deck
@@ -110,14 +110,17 @@ update msg model =
             ( { model | sortOrder = sortOrder, deck = model.deck |> Maybe.map (Deck.sort sortOrder) }, Cmd.none )
 
         Discard ->
-            case ( model.deck, model.discards ) of
-                ( Nothing, _ ) ->
+            case ( model.deck, model.discards, EverySet.size model.selected ) of
+                ( _, _, 0 ) ->
                     ( model, Cmd.none )
 
-                ( _, 0 ) ->
+                ( Nothing, _, _ ) ->
                     ( model, Cmd.none )
 
-                ( Just deck, discards ) ->
+                ( _, 0, _ ) ->
+                    ( model, Cmd.none )
+
+                ( Just deck, discards, _ ) ->
                     ( { model
                         | deck = Just <| Deck.discard model.selected deck
                         , selected = EverySet.empty
@@ -160,21 +163,21 @@ subscriptions _ =
 view : Model -> Html Msg
 view ({ deck, selected, hands, discards } as model) =
     nav
-        [ css
+        [ Attributes.css
             [ displayFlex
             , alignItems center
             , flexDirection column
             ]
         ]
         [ h1
-            [ css
+            [ Attributes.css
                 [ textAlign center
                 , fontSize <| rem 2
                 ]
             ]
             [ text "Elmatro" ]
         , div
-            [ css
+            [ Attributes.css
                 [ displayFlex
                 , flexDirection column
                 , padding <| px 20
@@ -186,9 +189,16 @@ view ({ deck, selected, hands, discards } as model) =
             , handInfoElement model
             ]
         , handElement deck selected
-        , button [ css [ marginTop <| px 12 ], onClick Discard ] [ text "Discard" ]
+        , button
+            [ Attributes.css
+                [ marginTop <| px 12
+                ]
+            , onClick Discard
+            , Attributes.disabled <| EverySet.size selected == 0
+            ]
+            [ text "Discard" ]
         , span
-            [ css
+            [ Attributes.css
                 [ marginTop <| px 12
                 , marginBottom <| px 12
                 , fontWeight bold
@@ -196,7 +206,7 @@ view ({ deck, selected, hands, discards } as model) =
             ]
             [ text <| "Sort By" ]
         , div
-            [ css
+            [ Attributes.css
                 [ displayFlex
                 , justifyContent spaceBetween
                 , width <| px 100
@@ -234,7 +244,7 @@ handInfoElement { deck, selected } =
             Maybe.withDefault 0 mHandScore
     in
     div
-        [ css
+        [ Attributes.css
             [ displayFlex
             , flexDirection column
             ]
@@ -256,7 +266,7 @@ handElement mDeck selected =
 
         Just deck ->
             div
-                [ css
+                [ Attributes.css
                     [ paddingTop <| px 70
                     , displayFlex
                     , flexDirection row
@@ -281,7 +291,7 @@ handElement mDeck selected =
 cardElement : Msg -> Bool -> Card.Card -> Html Msg
 cardElement msg selected card =
     div
-        [ css
+        [ Attributes.css
             [ position relative
             , bottom <|
                 if selected then
@@ -293,7 +303,7 @@ cardElement msg selected card =
         ]
         [ button
             [ onClick msg
-            , css
+            , Attributes.css
                 [ fontSize <| rem 10
                 , textAlign center
                 , backgroundColor transparent
