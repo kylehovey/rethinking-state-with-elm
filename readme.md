@@ -28,13 +28,13 @@ I think one of the most useful links I can share here is Elm's interactive onlin
 
 ## Running The Example App
 
-Make sure you have [Elm](https://elm-lang.org/) installed and run `elm reactor` to launch the example app.
+Make sure you have [Elm](https://elm-lang.org/) and [elm-live](https://github.com/wking-io/elm-live) installed and run `elm-live src/Main.elm --open -- --output=main.js` to launch the example app.
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/bb0e32a0-8da1-4034-bd22-3cf0bbbaa3de" />
 
 ### Using the Time Traveling Debugger
 
-If you'd like to demo the time traveling debugger, build the app using `elm make --debug src/Main.elm` and open `index.html` in your browser.
+If you'd like to demo the time traveling debugger, run the app using the `--debug` flag in addition to the normal arguments.
 
 # Thank You
 
