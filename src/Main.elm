@@ -208,13 +208,23 @@ view model =
                     [ displayFlex
                     , flexDirection column
                     , alignItems center
-                    , justifyContent flexEnd
-                    , height <| vh 90
+                    , justifyContent flexStart
+                    , height <| vh 100
                     , width <| pct 100
                     ]
                 ]
-                [ handElement model
-                , playerControls model
+                [ div
+                    [ Attributes.css
+                        [ displayFlex
+                        , flexDirection column
+                        , height <| vh 90
+                        , justifyContent flexEnd
+                        , alignItems center
+                        ]
+                    ]
+                    [ handElement model
+                    , playerControls model
+                    ]
                 ]
             ]
         , Css.Global.global
