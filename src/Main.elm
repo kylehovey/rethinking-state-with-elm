@@ -314,6 +314,23 @@ runInfo ({ hands, discards } as model) =
             [ numberCard "Hands" hands Colors.blueDim
             , numberCard "Discards" discards Colors.redDim
             ]
+        , div
+            [ Attributes.css
+                [ displayFlex
+                , height <| pct 100
+                , flexDirection column
+                , justifyContent flexEnd
+                ]
+            ]
+            [ a
+                [ Attributes.href "https://www.playbalatro.com/"
+                , Attributes.target "_blank"
+                , Attributes.css
+                    [ color Colors.greenDim
+                    ]
+                ]
+                [ text <| "Play The Real Thing!" ]
+            ]
         ]
 
 

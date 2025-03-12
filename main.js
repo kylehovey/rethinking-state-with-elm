@@ -9846,6 +9846,7 @@ var $rtfeldman$elm_css$VirtualDom$Styled$attribute = F2(
 			'');
 	});
 var $rtfeldman$elm_css$Html$Styled$Attributes$rel = $rtfeldman$elm_css$VirtualDom$Styled$attribute('rel');
+var $rtfeldman$elm_css$Html$Styled$a = $rtfeldman$elm_css$Html$Styled$node('a');
 var $author$project$Style$Colors$bg1 = A3($rtfeldman$elm_css$Css$rgb, 60, 56, 54);
 var $author$project$Style$Colors$bg2 = A3($rtfeldman$elm_css$Css$rgb, 80, 73, 69);
 var $author$project$Style$Colors$bg3 = A3($rtfeldman$elm_css$Css$rgb, 102, 92, 84);
@@ -10039,6 +10040,7 @@ var $author$project$Main$blindInfo = function (model) {
 };
 var $rtfeldman$elm_css$Css$borderLeft3 = $rtfeldman$elm_css$Css$prop3('border-left');
 var $rtfeldman$elm_css$Css$borderRight3 = $rtfeldman$elm_css$Css$prop3('border-right');
+var $author$project$Style$Colors$greenDim = A3($rtfeldman$elm_css$Css$rgb, 152, 151, 26);
 var $elm$core$Maybe$andThen = F2(
 	function (callback, maybeValue) {
 		if (maybeValue.$ === 'Just') {
@@ -10410,6 +10412,7 @@ var $author$project$Main$roundScoreDisplay = function (model) {
 			]));
 };
 var $rtfeldman$elm_css$Css$spaceBetween = $rtfeldman$elm_css$Css$prop1('space-between');
+var $rtfeldman$elm_css$Html$Styled$Attributes$target = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('target');
 var $author$project$Main$runInfo = function (model) {
 	var hands = model.hands;
 	var discards = model.discards;
@@ -10469,6 +10472,39 @@ var $author$project$Main$runInfo = function (model) {
 					[
 						A3($author$project$Main$numberCard, 'Hands', hands, $author$project$Style$Colors$blueDim),
 						A3($author$project$Main$numberCard, 'Discards', discards, $author$project$Style$Colors$redDim)
+					])),
+				A2(
+				$rtfeldman$elm_css$Html$Styled$div,
+				_List_fromArray(
+					[
+						$rtfeldman$elm_css$Html$Styled$Attributes$css(
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Css$displayFlex,
+								$rtfeldman$elm_css$Css$height(
+								$rtfeldman$elm_css$Css$pct(100)),
+								$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column),
+								$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$flexEnd)
+							]))
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$rtfeldman$elm_css$Html$Styled$a,
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$Attributes$href('https://www.playbalatro.com/'),
+								$rtfeldman$elm_css$Html$Styled$Attributes$target('_blank'),
+								$rtfeldman$elm_css$Html$Styled$Attributes$css(
+								_List_fromArray(
+									[
+										$rtfeldman$elm_css$Css$color($author$project$Style$Colors$greenDim)
+									]))
+							]),
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$text('Play The Real Thing!')
+							]))
 					]))
 			]));
 };
