@@ -18,7 +18,7 @@ class: invert
 
 ## jQuery
 
-- Just store it in the DOM! - John jQuery
+* Just store it in the DOM! - John jQuery
 * Was easy to use, but didn't scale
 * Lack of standard made managing state a bikeshedding experience
 
@@ -35,8 +35,9 @@ $( "body" ).data(); // { foo: 52, bar: { isManual: true }, baz: [ 1, 2, 3 ] }
 ## Flux
 
 * React brought declarative UI patterns
-* Flux was Facebook's answer to managing complex state
+* Flux was Facebook's answer to managing state
 * Application state split up in multiple stores
+* Ultimately didn't work out
 
 ![width:400px](./images/flux-architecture.png)
 
@@ -48,8 +49,16 @@ $( "body" ).data(); // { foo: 52, bar: { isManual: true }, baz: [ 1, 2, 3 ] }
 
 * Created by Evan Czaplicki
 * Inspired by Haskell and ML languages
-* No Higher Kinded Types (double-edged sword)
+* Replaces monads with an effect architecture
 * Focuses on simplicity and minimal syntax
+
+---
+
+## Directly Inspired
+
+* Redux was created to replace Flux using cues from Elm
+* Rust's error messages were inspired by Elm's helpful compiler
+* The move to FP on the FE started with Elm
 
 ---
 
@@ -65,44 +74,52 @@ $( "body" ).data(); // { foo: 52, bar: { isManual: true }, baz: [ 1, 2, 3 ] }
 
 ---
 
+## The Compiler
+
+* Error messages for humans
+* If it compiles, it's likely good
+* A constant companion for development
+* [Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+
+---
+
+## A Note on Haskell
+
+* Elm takes the ML type system from Haskell
+* No higher-kinded types, and so no Monads
+* Makes Elm a good starter ML FP language
+* Also adds rough edges
+
+---
+
 ## The Big Question
 
 * How does it handle state?
 
 ---
 
-## Haskell State Monad
-
-* Likely the inspiration for Elm's state model
-* Very useful, difficult to understand
-* Doesn't handle side-effects like network requests
-
-```haskell
-data Deck = Deck { hand :: [Cards], deck :: [Cards] }
-
-discard :: [Cards] -> State Deck [Cards]
-discard selected = do
-    newCards <- draw $ length selected
-    Deck {hand} <- get
-    let newHand = newCards <> [card | card <- hand, not $ card `elem` selected]
-    put $ Deck {hand = newHand}
-    return newHand
-```
-
----
-
 ## Elm State Model
+
+> TEA - The Elm Architecture
 
 * Code written can't perform side-effects
 * Runtime can run them, need commands from app
 * One universal state store
 
-![width:400px](./images/elm-state-model.gif)
+![width:800px](./images/elm-state-model.gif)
+
 
 ---
 
-## Directly Inspired
+## Application Types
 
-* Redux was created to replace Flux using cues from Elm
-* Rust's error messages were inspired by Elm's helpful compiler
-* The move to FP on the FE started with Elm
+* `Browser.sandbox` - Supports TEA, isolated
+* `Browser.element` - Additional functionality
+    * `Cmd` - Send messages to JS land
+    * `Sub` - Subscribe to events (how time is managed)
+    * Get flags from initialization
+    * Ports - Elm's FFI
+
+---
+
+## Show Me The Code!
