@@ -10342,7 +10342,7 @@ var $author$project$Main$roundScoreDisplay = function (model) {
 						$rtfeldman$elm_css$Css$borderRadius(
 						$rtfeldman$elm_css$Css$px(5)),
 						$rtfeldman$elm_css$Css$height(
-						$rtfeldman$elm_css$Css$px(80)),
+						$rtfeldman$elm_css$Css$px(110)),
 						$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
 						$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center)
 					]))

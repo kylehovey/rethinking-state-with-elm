@@ -430,7 +430,7 @@ roundScoreDisplay model =
             , backgroundColor Colors.bg
             , width <| pct 100
             , borderRadius <| px 5
-            , height <| px 80
+            , height <| px 110
             , justifyContent center
             , alignItems center
             ]
