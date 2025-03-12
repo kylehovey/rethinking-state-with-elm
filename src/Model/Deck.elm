@@ -88,8 +88,8 @@ mkCard suit rank =
 
 {-| This generates a basic 52 card deck as the product of all suits and ranks.
 -}
-mkDeck : () -> Random.Generator Deck
-mkDeck _ =
+mkDeck : Random.Generator Deck
+mkDeck =
     let
         cardGen =
             Card.allSuits

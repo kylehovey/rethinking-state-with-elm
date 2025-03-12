@@ -77,7 +77,7 @@ type Msg
 
 generateDeck : Cmd Msg
 generateDeck =
-    Random.generate DeckGenerated (Deck.mkDeck ())
+    Random.generate DeckGenerated Deck.mkDeck
 
 
 msgTask : Msg -> Cmd Msg

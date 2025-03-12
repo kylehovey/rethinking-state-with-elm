@@ -5555,7 +5555,7 @@ var $author$project$Model$Util$sequenceRandom = A2(
 	$elm$core$List$foldr,
 	$elm$random$Random$map2($elm$core$List$cons),
 	$elm$random$Random$constant(_List_Nil));
-var $author$project$Model$Deck$mkDeck = function (_v0) {
+var $author$project$Model$Deck$mkDeck = function () {
 	var cardGen = A2(
 		$elm$core$List$concatMap,
 		function (suit) {
@@ -5573,11 +5573,8 @@ var $author$project$Model$Deck$mkDeck = function (_v0) {
 			return {deck: deck, discarded: _List_Nil, hand: _List_Nil, handSize: 8};
 		},
 		$author$project$Model$Util$sequenceRandom(cardGen));
-};
-var $author$project$Main$generateDeck = A2(
-	$elm$random$Random$generate,
-	$author$project$Main$DeckGenerated,
-	$author$project$Model$Deck$mkDeck(_Utils_Tuple0));
+}();
+var $author$project$Main$generateDeck = A2($elm$random$Random$generate, $author$project$Main$DeckGenerated, $author$project$Model$Deck$mkDeck);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{deck: $elm$core$Maybe$Nothing, discards: 3, hands: 4, roundScore: 0, scoreToBeat: 300, selected: $Gizra$elm_all_set$EverySet$empty, sortOrder: $author$project$Model$Card$ByRank},
