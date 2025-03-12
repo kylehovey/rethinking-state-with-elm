@@ -30,7 +30,7 @@ I think one of the most useful links I can share here is Elm's interactive onlin
 
 Make sure you have [Elm](https://elm-lang.org/) and [elm-live](https://github.com/wking-io/elm-live) installed and run `elm-live src/Main.elm --open -- --output=main.js` to launch the example app.
 
-<img width="1691" alt="image" src="https://github.com/user-attachments/assets/48b17ef9-0a15-4d23-9b74-359b9938b0e0" />
+<img width="1693" alt="image" src="https://github.com/user-attachments/assets/8cffc359-5bcc-4b31-9274-a81bb4bf6c84" />
 
 ### Using the Time Traveling Debugger
 
