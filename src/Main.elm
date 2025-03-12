@@ -227,7 +227,8 @@ view model =
                         , alignItems center
                         ]
                     ]
-                    [ handElement model
+                    [ endResult model
+                    , handElement model
                     , playerControls model
                     ]
                 ]
@@ -243,6 +244,43 @@ view model =
             ]
         , node "link" [ Attributes.href "src/fonts.css", Attributes.rel "stylesheet" ] []
         ]
+
+
+endResult : Model -> Html Msg
+endResult model =
+    let
+        hasWon =
+            model.roundScore >= model.scoreToBeat
+
+        hasLost =
+            model.hands == 0 && not hasWon
+
+        show =
+            hasWon || hasLost
+
+        ( message, messageColor ) =
+            if hasWon then
+                ( "You Win!", Colors.green )
+
+            else if hasLost then
+                ( "You Lost...", Colors.red )
+
+            else
+                ( "", Colors.fg )
+    in
+    span
+        [ Attributes.css
+            [ fontSize <| rem 5
+            , color messageColor
+            , marginBottom <| px 50
+            , if show then
+                display block
+
+              else
+                display none
+            ]
+        ]
+        [ text <| message ]
 
 
 runInfo : Model -> Html Msg
