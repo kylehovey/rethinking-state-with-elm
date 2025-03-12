@@ -487,7 +487,7 @@ handScoreDisplay model =
             , alignItems center
             , flexDirection column
             , borderRadius <| px 5
-            , height <| px 100
+            , height <| px 180
             , justifyContent flexEnd
             ]
         ]

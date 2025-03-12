@@ -10114,7 +10114,7 @@ var $author$project$Main$handScoreDisplay = function (model) {
 						$rtfeldman$elm_css$Css$borderRadius(
 						$rtfeldman$elm_css$Css$px(5)),
 						$rtfeldman$elm_css$Css$height(
-						$rtfeldman$elm_css$Css$px(100)),
+						$rtfeldman$elm_css$Css$px(180)),
 						$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$flexEnd)
 					]))
 			]),
