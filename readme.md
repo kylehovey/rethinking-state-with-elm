@@ -1,5 +1,7 @@
 # Rethinking State With Elm
 
+![Elm Logo](./images/Elm_logo.svg.png)
+
 Hello! Welcome to the home of my talk/presentation on Elm, a beautiful web framework that was inspired by Haskell and that, in turn, inspired features of Redux and Rust. This repository is both an example application and also contains the presentation.
 
 ## Running The Presentation
