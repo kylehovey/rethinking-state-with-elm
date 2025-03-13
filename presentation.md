@@ -106,8 +106,12 @@ $( "body" ).data(); // { foo: 52, bar: { isManual: true }, baz: [ 1, 2, 3 ] }
 * Runtime can run them, need commands from app
 * One universal state store
 
-![width:800px](./images/elm-state-model.gif)
 
+---
+
+## Elm State Model
+
+![width:700px](./images/tea.png)
 
 ---
 
